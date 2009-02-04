@@ -1,12 +1,13 @@
 package client;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import java.net.UnknownHostException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Console {
 
@@ -18,13 +19,15 @@ public class Console {
 	
 	public Console() {
 		readConfig(CONFIG_FILE);
-		connectToServer();		
+		connectToServer();
 	}
+	// TODO lib/util package for common libraries e.g. parsing input file
+	// TODO System.exit(-1)
+	// TODO JUnit testing
 	
 	public void execute() {
 		Scanner cmd = new Scanner(System.in);
-		for(String c; !(c = cmd.nextLine()).equalsIgnoreCase("exit"); ) {			
-			
+		for(String c; !(c = cmd.nextLine()).equalsIgnoreCase("exit"); ) {		
 			try {
 				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
 				out.write(c+"\n");
@@ -32,7 +35,7 @@ public class Console {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();			
-			}		
+			}	
 		}
 		try {
 			serverSocket.close();
@@ -76,7 +79,7 @@ public class Console {
 	}
 	
 	public static void main(String[] args) {
-		// TODO args[0] can be used to overwrite defailt config file
+		// TODO args[0] can be used to overwrite default config file
 		Console c = new Console();
 		c.execute();
 	}

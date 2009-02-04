@@ -4,11 +4,9 @@ import java.net.ServerSocket;
 
 public class Auction {
 
-	ServerSocket serverSocket;
+	ServerSocket auctionSocket;
 	
-	public Auction(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
+	public Auction(ServerSocket auctionSocket) {
+		this.auctionSocket = auctionSocket;
 	}
-	
-	
 }
