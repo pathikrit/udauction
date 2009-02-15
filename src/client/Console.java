@@ -21,7 +21,7 @@ public class Console {
 		readConfig(CONFIG_FILE);
 		connectToServer();
 	}
-	// TODO lib/util package for common libraries e.g. parsing input file
+	// TODO lib package for common libraries e.g. parsing input file in Util.java
 	// TODO System.exit(-1)
 	// TODO JUnit testing
 	
@@ -29,12 +29,15 @@ public class Console {
 		Scanner cmd = new Scanner(System.in);
 		for(String c; !(c = cmd.nextLine()).equalsIgnoreCase("exit"); ) {		
 			try {
+				for(Scanner in = new Scanner(serverSocket.getInputStream()); in.hasNextLine(); ) {					
+					System.out.println(in.nextLine());
+				}				
 				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
 				out.write(c+"\n");
 				out.flush();				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();			
+				e.printStackTrace();
 			}	
 		}
 		try {
