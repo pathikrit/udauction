@@ -1,4 +1,4 @@
-package manager;
+package auction;
 
 import java.net.ServerSocket;
 

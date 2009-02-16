@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-//import manager.Auction;
+//import auction.Auction;
 
 public class Server {	
 	

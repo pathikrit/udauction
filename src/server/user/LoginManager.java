@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class LoginManager {
 
 	private Hashtable<String, String> passwordTable = new Hashtable<String, String>();
-	
+
 	//TODO: keep track of logins, ip
 	
 	public boolean login(String username, String hash) {		
@@ -15,7 +15,7 @@ public class LoginManager {
 	public boolean register(String username, String hash) {
 		if(passwordTable.containsKey(username))
 			return false;
-		passwordTable.put(username, hash);
+		passwordTable.put(username, hash);		
 		return true;
 	}
 	

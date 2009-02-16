@@ -1,5 +1,10 @@
 package server;
 
+import java.util.Hashtable;
+
+import auction.Auction;
+import auction.AuctionManager;
+
 import server.user.LoginManager;
 import server.user.UserData;
 
@@ -7,11 +12,15 @@ public class ServerProtocol {
 	
 	private String commands[][] = { 
 			{"LOGIN", "username", "password"},	
-			{"REGISTER", "username", "password", "confirm_password"},			
+			{"REGISTER", "username", "password", "confirm_password"},
+			{"LOGOUT"},
+			{"CREATE_AUCTION"},
 			{"HELP"}
 	};
 	
 	private static LoginManager loginManager = new LoginManager();
+	private Hashtable<String, UserData> userTable = new Hashtable<String, UserData>();
+	private static AuctionManager auctionManager = new AuctionManager();
 	
 	// TODO: nicer returns
 	public String processCommand(String line, UserData data) {		
@@ -21,6 +30,8 @@ public class ServerProtocol {
 		
 		if(split[0].equalsIgnoreCase("LOGIN")) {
 			if(loginManager.login(split[1], split[2])) {
+				if (userTable.containsKey(split[1]))
+					data = userTable.get(split[1]);
 				data.setLoggedIn(true);
 				return "Login Succesful!";
 			} else {
@@ -36,6 +47,9 @@ public class ServerProtocol {
 			} else {
 				return "Passwords do not match ...";
 			}			
+		} else if(split[0].equalsIgnoreCase("CREATE_AUCTION")) {
+			auctionManager.createAuction();			
+			return "NOT IMPLEMENTED";			
 		} else		
 			return "Should not reach here";
 	}
