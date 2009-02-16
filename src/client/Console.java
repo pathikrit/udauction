@@ -1,6 +1,8 @@
 package client;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -27,19 +29,22 @@ public class Console {
 	
 	public void execute() {
 		Scanner cmd = new Scanner(System.in);
-		for(String c; !(c = cmd.nextLine()).equalsIgnoreCase("exit"); ) {		
+		String c = "";		
+		do {		
 			try {
-				for(Scanner in = new Scanner(serverSocket.getInputStream()); in.hasNextLine(); ) {					
-					System.out.println(in.nextLine());
-				}				
+				String fromServer;
+				for(Scanner in = new Scanner(serverSocket.getInputStream()); !(fromServer = in.nextLine()).equalsIgnoreCase("BYE"); ) { 				
+					System.out.println(fromServer);
+				}			
 				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
-				out.write(c+"\n");
-				out.flush();				
+				c = cmd.nextLine();
+				out.println(c);
+				out.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
-		}
+		} while(!c.equalsIgnoreCase("EXIT"));
 		try {
 			serverSocket.close();
 		} catch (IOException e) {
@@ -61,6 +66,8 @@ public class Console {
 			return;
 		}	
 	}
+	
+	//TODO: merge all readConfigs into util 
 	
 	public void readConfig(String file) {
 		try {

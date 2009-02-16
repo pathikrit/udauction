@@ -17,8 +17,11 @@ public class DisplayManager {
 			
 		} else {
 			//TODO: nicer print outs
-			out.write("login<username, password>, register<username, password, password>\n");
-			out.flush();
+			out.println("login<username, password>, register<username, password, password>");
+			
+			//only login code no server protocol
 		}
+		out.println("bye");
+		out.flush();
 	}
 }
