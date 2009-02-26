@@ -6,6 +6,7 @@ import auction.Auction;
 import auction.AuctionManager;
 
 import server.user.LoginManager;
+import server.user.User;
 import server.user.UserData;
 
 public class ServerProtocol {
@@ -14,7 +15,8 @@ public class ServerProtocol {
 			{"LOGIN", "username", "password"},	
 			{"REGISTER", "username", "password", "confirm_password"},
 			{"LOGOUT"},
-			{"CREATE_AUCTION"},
+			{"CREATE_AUCTION", "auction_name"},
+			{"JOIN_AUCTION", "auction_name"},
 			{"HELP"}
 	};
 	
@@ -23,8 +25,11 @@ public class ServerProtocol {
 	private static AuctionManager auctionManager = new AuctionManager();
 	
 	// TODO: nicer returns
-	public String processCommand(String line, UserData data) {		
+	public String processCommand(String line, User user) {
+		UserData data = user.getData();
 		String split[] = validate(line);
+		Auction auction = null;
+		
 		if(split == null)
 			return "BAD COMMAND!";
 		
@@ -48,9 +53,20 @@ public class ServerProtocol {
 				return "Passwords do not match ...";
 			}			
 		} else if(split[0].equalsIgnoreCase("CREATE_AUCTION")) {
-			auctionManager.createAuction();			
-			return "NOT IMPLEMENTED";			
-		} else		
+			if ((auction = auctionManager.createAuction(split[1], user)) == null) {
+				return "The auction name was already taken";
+			} else {
+				data.addAuction(auction);
+				return "Succesfully created an auction \"" + split[1] +"\"";
+			}
+		} else if(split[0].equalsIgnoreCase("JOIN_AUCTION")) {
+			if ((auction = auctionManager.getAuction(split[1], user)) == null) {
+				return "You are not allowed to join this auction";
+			} else {
+				data.joinAuction(auction);
+				return "Succesfully joined an auction \"" + split[1] + "\"";
+			}
+		} else
 			return "Should not reach here";
 	}
 	

@@ -10,5 +10,9 @@ public class User {
 	
 	public UserData getData() {
 		return data;
-	}	
+	}
+	
+	public boolean equals(User user) {
+		return data.equals(user.getData());
+	}
 }

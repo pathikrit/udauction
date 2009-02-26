@@ -36,7 +36,7 @@ public class ServerThread extends Thread {
 			while(true) {
 			
 				displayManager.display(user.getData());				
-				out.println(serverProtocol.processCommand(in.nextLine(), user.getData()));				
+				out.println(serverProtocol.processCommand(in.nextLine(), user));				
 				out.flush();			
 			} 			
 			//out.close();
