@@ -33,6 +33,7 @@ public class ServerProtocol {
 		if(split == null)
 			return "BAD COMMAND!";
 		
+		// TODO: put user's login ip address in userdata & user
 		if(split[0].equalsIgnoreCase("LOGIN")) {
 			if(loginManager.login(split[1], split[2])) {
 				if (userTable.containsKey(split[1]))
@@ -54,7 +55,7 @@ public class ServerProtocol {
 			}			
 		} else if(split[0].equalsIgnoreCase("CREATE_AUCTION")) {
 			if ((auction = auctionManager.createAuction(split[1], user)) == null) {
-				return "The auction name was already taken";
+				return "The auction name is taken";
 			} else {
 				data.addAuction(auction);
 				return "Succesfully created an auction \"" + split[1] +"\"";
@@ -63,11 +64,13 @@ public class ServerProtocol {
 			if ((auction = auctionManager.getAuction(split[1], user)) == null) {
 				return "You are not allowed to join this auction";
 			} else {
-				data.joinAuction(auction);
+				data.joinAuction(auction); // TODO: modify userdata for current user
 				return "Succesfully joined an auction \"" + split[1] + "\"";
 			}
 		} else
 			return "Should not reach here";
+		// TODO: in logout, merge userdata for all different logins of same user
+		// TODO: OR change userdata dynamically
 	}
 	
 	/*

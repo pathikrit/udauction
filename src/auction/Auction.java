@@ -21,7 +21,7 @@ public class Auction {
 		return auctionAdmin;
 	}
 	
-	public boolean isAllowed(User user) {
+	public boolean canJoin(User user) {
 		return true;
 	}
 }

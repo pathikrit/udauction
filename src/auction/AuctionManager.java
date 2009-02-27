@@ -6,35 +6,22 @@ import server.user.User;
 
 public class AuctionManager {
 
+	// TODO: structure the program such that all permission checking of actions is done in one PermissionChecker class.
+	
 	private Hashtable<String, Auction> auctions = new Hashtable<String, Auction>();
 		
-	public Auction createAuction(String name, User user) {
-		name = name.toLowerCase();
-		if (auctions.contains(name)) {
-			return null;
-		}
-		else {
-			Auction newAuction = new Auction(name, user);
-			auctions.put(name, newAuction);
-			return newAuction;
-		}
+	public Auction createAuction(String name, User auctionAdmin) {
+		name = name.toLowerCase();		
+		return auctions.contains(name) ? null : auctions.put(name, new Auction(name, auctionAdmin));		
 	}
 	
 	public boolean deleteAuction(String name, User user) {
-		name = name.toLowerCase();
-		Auction auction = auctions.get(name);
-		if (auction == null || !auction.getAuctionAdmin().equals(user)) {
-			return false;
-		}
-		return true;
+		name = name.toLowerCase();		
+		return auctions.get(name).getAuctionAdmin().equals(user) && (auctions.remove(name) != null);
 	}
 	
 	public Auction getAuction(String name, User user) {
 		name = name.toLowerCase();
-		Auction auction = auctions.get(name);
-		if (auction == null || !auction.isAllowed(user)) // TODO: better naming for isAllowed
-			return null;
-		else
-			return auction;
+		return auctions.get(name).canJoin(user) ? auctions.get(name) : null;
 	}
 }
