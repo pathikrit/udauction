@@ -1,13 +1,13 @@
 package server.user;
 
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import auction.Auction;
 
 public class UserData {
 	
-	private Hashtable<String, Object> data = new Hashtable<String, Object>();
+	private HashMap<String, Object> data = new HashMap<String, Object>();
 	
 	public UserData() {
 		data.put("LOGGED_IN", false);

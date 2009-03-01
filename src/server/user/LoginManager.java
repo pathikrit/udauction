@@ -1,10 +1,10 @@
 package server.user;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class LoginManager {
 
-	private Hashtable<String, String> passwordTable = new Hashtable<String, String>();
+	private HashMap<String, String> passwordTable = new HashMap<String, String>();
 
 	//TODO: keep track of logins, ip
 	

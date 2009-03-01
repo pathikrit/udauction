@@ -1,6 +1,6 @@
 package auction;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import server.user.User;
 
@@ -8,11 +8,11 @@ public class AuctionManager {
 
 	// TODO: structure the program such that all permission checking of actions is done in one PermissionChecker class.
 	
-	private Hashtable<String, Auction> auctions = new Hashtable<String, Auction>();
+	private HashMap<String, Auction> auctions = new HashMap<String, Auction>();	
 		
 	public Auction createAuction(String name, User auctionAdmin) {
 		name = name.toLowerCase();		
-		return auctions.contains(name) ? null : auctions.put(name, new Auction(name, auctionAdmin));		
+		return auctions.containsKey(name) ? null : auctions.put(name, new Auction(name, auctionAdmin));		
 	}
 	
 	public boolean deleteAuction(String name, User user) {

@@ -26,6 +26,7 @@ public class Server {
 		}	
 	}
 	
+	//TODO: Auto discovery of server
 	public void listen() {		
 		boolean listening = true;
 		// TODO another thread for listening to command line for exit command

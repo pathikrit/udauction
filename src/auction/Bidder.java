@@ -1,5 +1,68 @@
 package auction;
 
-public class Bidder {
+import java.util.LinkedHashSet;
 
+import server.user.User;
+import lib.Pair;
+
+// TODO: Make sure all imports are standardly arranged
+
+public class Bidder {
+	
+	protected static class Bid extends Pair<Item, Integer> {		
+		
+		public Bid(Item item, Integer weight) {
+			super(item, weight);
+		}
+		
+		public Item getItem() {
+			return getFirst();
+		}
+		
+		public int getWeight() {
+			// TODO: make sure all bids are named weights in all files
+			return getSecond();
+		}		
+	}
+	
+	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
+	private Item matched;
+	private User user;
+	private int u = 0, shift = 0;
+	
+	public Bidder() {
+		this(null);
+	}
+	
+	public Bidder(User u) {
+		user = u; 
+	}
+	
+	public void addBid(Item item, int weight) {		
+		bids.add(new Bid(item, weight));
+	}
+	
+	public LinkedHashSet<Bid> getBids() {
+		return bids;
+	}
+
+	public void setU(int u) {
+		this.u = u;
+	}
+
+	public int getU() {
+		return u;
+	}
+
+	public void setMatched(Item matched) {
+		this.matched = matched;
+	}
+
+	public Item getMatched() {
+		return matched;
+	}
+	
+	public String toString() {
+		return user.toString();
+	}
 }

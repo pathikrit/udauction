@@ -1,6 +1,6 @@
 package server;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import auction.Auction;
 import auction.AuctionManager;
@@ -21,7 +21,7 @@ public class ServerProtocol {
 	};
 	
 	private static LoginManager loginManager = new LoginManager();
-	private Hashtable<String, UserData> userTable = new Hashtable<String, UserData>();
+	private HashMap<String, UserData> userTable = new HashMap<String, UserData>();
 	private static AuctionManager auctionManager = new AuctionManager();
 	
 	// TODO: nicer returns
