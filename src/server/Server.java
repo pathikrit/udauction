@@ -51,7 +51,8 @@ public class Server {
 			for(Scanner sc = new Scanner(new File(file)); sc.hasNextLine(); ) {
 				String line = sc.nextLine().trim();				
 				if(line.startsWith("port"))
-					serverPort = Integer.parseInt(line.substring(line.indexOf("=")+1).trim());				
+					serverPort = Integer.parseInt(line.substring(line.indexOf("=")+1).trim());		
+				// TODO: make sure all ifs have braces
 			}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block

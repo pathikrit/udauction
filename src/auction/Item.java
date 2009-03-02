@@ -12,8 +12,10 @@ public class Item {
 	
 	// TODO: comments of time
 	public Item() {
-		this("");
+		this(""); //TODO: is this a bug? generate a random id maybe?
 	}
+	
+	// TODO: Can we create two items in an auctyion with same id?
 	
 	public Item(String id) {
 		this(id, Long.MAX_VALUE, 0, System.currentTimeMillis());		

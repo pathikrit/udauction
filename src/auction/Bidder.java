@@ -26,13 +26,13 @@ public class Bidder {
 	}
 	
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
-	private Item matched;
+	private Item matched; //TODO: match to dummy?
 	private User user;
 	private int u = 0, shift = 0;
 	
-	public Bidder() {
-		this(null);
-	}
+//	public Bidder() {
+//		this(null); // TODO: we need this
+//	}
 	
 	public Bidder(User u) {
 		user = u; 

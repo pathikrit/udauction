@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import auction.Auction;
 
-public class UserData {
+public class UserData { // TODO: make this class extend a HashMap
 	
 	private HashMap<String, Object> data = new HashMap<String, Object>();
 	

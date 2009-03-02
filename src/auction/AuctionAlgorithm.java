@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import lib.Util;
 
 public class AuctionAlgorithm {
-
 	
 	protected static final Item DUMMY = new Item();
 	

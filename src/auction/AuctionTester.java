@@ -16,24 +16,27 @@ public class AuctionTester {
 	private static int w[][];
 	private final static int DENSITY = 33, S = 10, T = 10, MAX_WEIGHT = 20;
 	
+	//TODO: make a nicer tester
+	
 	public static void main(String args[]) {
 		auction =  new Auction("Test Auction", new User());
 		items = auction.getItems();
 		bidders = new LinkedHashSet<Bidder>();
 		
 //		generateRandom();
-		w = new int[][]{{ 0, 0, 0, 7, 16, 18, 14, 0, 0, 10, },
-				{ 18, 0, 0, 4, 6, 0, 17, 0, 0, 3, },
-				{ 4, 10, 0, 0, 0, 4, 18, 3, 0, 0, },
-				{ 0, 0, 0, 0, 0, 0, 5, 9, 0, 14, },
-				{ 14, 14, 0, 0, 19, 0, 11, 17, 0, 0, },
-				{ 0, 18, 15, 8, 0, 0, 5, 3, 0, 8, },
-				{ 15, 5, 0, 14, 0, 8, 0, 0, 12, 9, },
-				{ 0, 0, 0, 0, 18, 15, 10, 13, 17, 4, },
-				{ 19, 1, 0, 17, 0, 15, 15, 0, 14, 0, },
-				{ 0, 10, 7, 5, 12, 0, 6, 18, 10, 4, }};
+		w = new int[][]{{0, 0, 0, 7, 16, 18, 14, 0, 0, 10},
+						{18, 0, 0, 4, 6, 0, 17, 0, 0, 3},
+						{4, 10, 0, 0, 0, 4, 18, 3, 0, 0},
+						{0, 0, 0, 0, 0, 0, 5, 9, 0, 14},
+						{14, 14, 0, 0, 19, 0, 11, 17, 0, 0},
+						{0, 18, 15, 8, 0, 0, 5, 3, 0, 8},
+						{15, 5, 0, 14, 0, 8, 0, 0, 12, 9},
+						{0, 0, 0, 0, 18, 15, 10, 13, 17, 4},
+						{19, 1, 0, 17, 0, 15, 15, 0, 14, 0},
+						{0, 10, 7, 5, 12, 0, 6, 18, 10, 4}
+					   };
 		
-		int row = w.length, col = w[0].length;
+		int row = w.length, col = w[0].length;		
 		for (int i = 0; i < row; i++) {
 			Bidder newBidder = new Bidder(new User("B"+i));
 			for (int j = 0; j < col; j++) {
@@ -52,8 +55,6 @@ public class AuctionTester {
 //				if(newBid.matched.equals(dummy)) bidders.remove(newBid);
 //				if(bidders.contains(dummy.matched)) bidders.remove(dummy.matched);
 //			}
-
-			
 			
 			for(Bidder bidder : bidders) {
 				System.out.print(bidder + "'s edge-weights are: ");
