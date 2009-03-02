@@ -12,16 +12,24 @@ public class AuctionManager {
 		
 	public Auction createAuction(String name, User auctionAdmin) {
 		name = name.toLowerCase();		
-		return auctions.containsKey(name) ? null : auctions.put(name, new Auction(name, auctionAdmin));		
+		if(auctions.containsKey(name))
+			return null;
+		Auction auction = new Auction(name, auctionAdmin); 
+		auctions.put(name, auction);
+		return auction;
 	}
 	
 	public boolean deleteAuction(String name, User user) {
-		name = name.toLowerCase();		
-		return auctions.get(name).getAuctionAdmin().equals(user) && (auctions.remove(name) != null);
+		name = name.toLowerCase();
+		Auction auction = auctions.get(name);		
+		return auction != null && auction.getAuctionAdmin().equals(user) && (auctions.remove(name) != null);
 	}
 	
 	public Auction getAuction(String name, User user) {
 		name = name.toLowerCase();
-		return auctions.get(name).canJoin(user) ? auctions.get(name) : null;
+		Auction auction = auctions.get(name);
+		if(auction == null || !auction.canJoin(user))
+			return null;
+		return auction;
 	}
 }

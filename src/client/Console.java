@@ -1,3 +1,4 @@
+// TODO: How to compile and run from command line
 package client;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ public class Console {
 	
 	private String server;
 	private int port;
-	private Socket serverSocket;
+	protected Socket serverSocket;
 	
 	public Console() {
 		readConfig(CONFIG_FILE);
@@ -37,9 +38,11 @@ public class Console {
 					System.out.println(fromServer);
 				}			
 				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
+				System.out.println();
 				c = cmd.nextLine();
 				out.println(c);
 				out.flush();
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

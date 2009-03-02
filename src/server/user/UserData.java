@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 
 import auction.Auction;
+import auction.Bidder;
 
 public class UserData { // TODO: make this class extend a HashMap
 	
@@ -12,7 +13,10 @@ public class UserData { // TODO: make this class extend a HashMap
 	public UserData() {
 		data.put("LOGGED_IN", false);
 		HashSet<Auction> auctions = new HashSet<Auction>();
+		HashSet<Bidder> bidders = new HashSet<Bidder>();
 		data.put("CREATED_AUCTIONS", auctions);
+		data.put("BIDDERS", bidders);
+		data.put("EXIT", false);
 	}
 	
 	public void setUserName(String username) {
@@ -35,6 +39,12 @@ public class UserData { // TODO: make this class extend a HashMap
 		data.put("CURRENT_AUCTION", auction);
 	}
 	
+	public Auction leaveAuction() {
+		Auction auction = getCurrentAuction();
+		joinAuction(null);
+		return auction;
+	}
+	
 	public Auction getCurrentAuction() {
 		return (Auction)data.get("CURRENT_AUCTION");
 	}
@@ -49,8 +59,30 @@ public class UserData { // TODO: make this class extend a HashMap
 		((HashSet<Auction>)data.get("CREATED_AUCTIONS")).remove(auction);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void addBidder(Bidder bidder) {
+		((HashSet<Bidder>)data.get("BIDDERS")).add(bidder);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void removeBidder(Bidder bidder) {
+		((HashSet<Bidder>)data.get("BIDDERS")).remove(bidder);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashSet<Bidder> getBidders() {
+		return ((HashSet<Bidder>)data.get("BIDDERS"));
+	}
+	
 	public boolean equals(UserData data) {
 		return getUserName().equals(data.getUserName()); 
 	}
-
+	
+	public void setExit(boolean exit) {
+		data.put("EXIT", exit);
+	}
+	
+	public boolean isExit() {
+		return (Boolean)data.get("EXIT");
+	}
 }

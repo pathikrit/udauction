@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import lib.Util;
+import static lib.Util.INFINITY;
 
 public class AuctionAlgorithm {
 	
 	protected static final Item DUMMY = new Item();
 	
-	public void matchBidder(Bidder bidder, LinkedHashSet<Bidder> bidders) {
+	public static void matchBidder(Bidder bidder) {
 		HashMap<Item, Integer> potentials = new HashMap<Item, Integer>();
 		HashMap<Bidder, Item> labelBidders = new HashMap<Bidder, Item>();
 		HashMap<Item, Bidder> labelItems = new HashMap<Item, Bidder>();
@@ -24,7 +24,7 @@ public class AuctionAlgorithm {
 		DUMMY.setV(0);
 		DUMMY.setMatched(null);
 		labelBidders.put(bidder, DUMMY);
-		potentials.put(DUMMY, Util.INFINITY);
+		potentials.put(DUMMY, INFINITY);
 		
 		while(true) {
 			for (Bidder b: labelBidders.keySet())
@@ -57,7 +57,7 @@ public class AuctionAlgorithm {
 						Item right = item;
 						if(!labelItems.containsKey(right)) 
 							return;
-						for (Bidder left = labelItems.get(right); ; left = labelItems.get(right)) {
+						for (Bidder left = labelItems.get(right); ;left = labelItems.get(right)) {
 							if(left.getMatched() == right) {
 								left.setMatched(null);
 								right.setMatched(null);
@@ -75,17 +75,18 @@ public class AuctionAlgorithm {
 								if (!labelBidders.containsKey(left) || labelBidders.get(left).equals(DUMMY)) 
 									return;
 								right = labelBidders.get(left);
-								if (!labelItems.containsKey(right)) return;
+								if (!labelItems.containsKey(right)) 
+									return;
 							}
 						}
 					}
 				}
 			if(pass) {
-				int delta = Util.INFINITY;
+				int delta = INFINITY;
 				for (Integer i: potentials.values())
 					if (i > 0)
 						delta = Math.min(delta, i);
-				if (delta == Util.INFINITY) {
+				if (delta == INFINITY) {
 					bidder.setMatched(DUMMY);
 					return;
 				}

@@ -2,6 +2,8 @@ package server;
 
 import java.io.PrintWriter;
 
+import auction.Bidder;
+
 import server.user.UserData;
 
 public class DisplayManager {
@@ -12,16 +14,19 @@ public class DisplayManager {
 		this.out = out;
 	}
 	
-	public void display(UserData data) {
+	public String display(UserData data) {
+		String displayString = "";
 		if(data.isLoggedIn()) {
-			
-		} else {
+			for(Bidder bidder: data.getBidders()) {
+				displayString += "You are matched to " + bidder.getMatched() + " in auction " + bidder.getAuction() + " for price " + bidder.getMatched().getV() + "\n";
+			}
+		} else { //only login code no server protocol
 			//TODO: nicer print outs
-			out.println("login<username, password>, register<username, password, password>");
-			
-			//only login code no server protocol
+			displayString += "login <username> <password> OR register <username> <password> <confirm_password>";			
 		}
-		out.println("bye");
+		displayString += "\nbye";
+		out.println(displayString);	
 		out.flush();
+		return displayString;
 	}
 }

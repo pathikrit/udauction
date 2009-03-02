@@ -1,6 +1,7 @@
 package server;
 
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import java.io.IOException;
@@ -33,17 +34,24 @@ public class ServerThread extends Thread {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			displayManager = new DisplayManager(out);
 			
-			while(true) {			
-				displayManager.display(user.getData());				
-				out.println(serverProtocol.processCommand(in.nextLine(), user));				
+			while(!user.getData().isExit()) {			
+				displayManager.display(user.getData());
+				
+				// TODO: restructure all outs to DisplayManager
+				try {
+					out.println(serverProtocol.processCommand(in.nextLine(), user));
+				} catch(NoSuchElementException nsee) {
+					System.out.println("Client ended communication");
+					break;
+					// TODO: remove try-catch
+				}
 				out.flush();			
 			} 			
 			//out.close();
 		} catch (IOException e) {
 		    e.printStackTrace();
 		} finally {
-			try {
-				
+			try {				
 				clientSocket.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

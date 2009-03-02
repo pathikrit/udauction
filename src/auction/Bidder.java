@@ -10,7 +10,6 @@ import lib.Pair;
 public class Bidder {
 	
 	protected static class Bid extends Pair<Item, Integer> {		
-		
 		public Bid(Item item, Integer weight) {
 			super(item, weight);
 		}
@@ -25,6 +24,7 @@ public class Bidder {
 		}		
 	}
 	
+	private Auction auction;
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
 	private Item matched; //TODO: match to dummy?
 	private User user;
@@ -34,8 +34,9 @@ public class Bidder {
 //		this(null); // TODO: we need this
 //	}
 	
-	public Bidder(User u) {
-		user = u; 
+	public Bidder(User user, Auction auction) {
+		this.user = user;
+		this.auction = auction;
 	}
 	
 	public void addBid(Item item, int weight) {		
@@ -60,6 +61,10 @@ public class Bidder {
 
 	public Item getMatched() {
 		return matched;
+	}
+	
+	public Auction getAuction() {
+		return auction;
 	}
 	
 	public String toString() {
