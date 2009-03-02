@@ -2,8 +2,6 @@ package auction;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-
 import static lib.Util.INFINITY;
 
 public class AuctionAlgorithm {

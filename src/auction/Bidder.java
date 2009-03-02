@@ -28,7 +28,7 @@ public class Bidder {
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
 	private Item matched; //TODO: match to dummy?
 	private User user;
-	private int u = 0, shift = 0;
+	private int u = 0; //, shift = 0;
 	
 //	public Bidder() {
 //		this(null); // TODO: we need this

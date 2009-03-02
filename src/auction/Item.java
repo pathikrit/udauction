@@ -5,7 +5,9 @@ public class Item {
 	private String id; //TODO: create a ItemData class to manage more item info
 	
 	private boolean active = true;
+	@SuppressWarnings("unused")
 	private int v = 0, startingPrice = 0, reservePrice = 0;
+	@SuppressWarnings("unused")
 	private long startingTime, endTime, extendTime;	
 	
 	private Bidder matched;
