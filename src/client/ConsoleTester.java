@@ -20,13 +20,14 @@ public class ConsoleTester extends Console {
 						"register linh test test2\n" +
 						"register linh test test\n" +
 						"login linh test2\n" +
-						"login linh test\n" +
+						"login linh test\n" +						
 						"add_item i1\n" +
 						"join_auction a0\n" +
 						"create_auction a1\n" +
 						"join_auction a2\n" +
 						"create_auction a2\n" +
 						"join_auction a1\n" +
+						"login linh test\n" +
 						"add_item i1\n" +
 						"add_item i1\n" +
 						"add_item i2 i3 i1\n" +

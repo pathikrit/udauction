@@ -43,7 +43,9 @@ public class ServerProtocol {
 		if(split[0].equalsIgnoreCase("LOGIN")) {
 			if(loginManager.login(split[1], split[2])) {
 				if (userTable.containsKey(split[1]))
-					data = userTable.get(split[1]);
+					data = userTable.get(split[1]);				
+				if(data.isLoggedIn())
+					return "You are already logged in!";
 				data.setLoggedIn(true);
 				return "Login Succesful!";
 			} else {

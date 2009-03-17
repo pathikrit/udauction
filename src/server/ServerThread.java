@@ -53,6 +53,7 @@ public class ServerThread extends Thread {
 		} finally {
 			try {				
 				clientSocket.close();
+				System.out.println("Client disconnected: " + clientSocket);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

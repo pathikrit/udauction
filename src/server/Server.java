@@ -63,10 +63,6 @@ public class Server {
 		}
 	}
 	
-	public void createAuction() {
-		// TODO
-	}
-	
 	public static void main(String cmdLine[]) {
 		// TODO args[0] can be used to overwrite default config file
 		// TODO rename all dot files to .config 
