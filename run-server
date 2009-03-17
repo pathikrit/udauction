@@ -1,0 +1,6 @@
+echo "Running server!"
+cp .server src/
+cd src/
+javac server/*.java
+java server.Server
+cd ..

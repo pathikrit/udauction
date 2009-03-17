@@ -1,0 +1,7 @@
+echo "Running client. Make sure you have the server ip address in the 
+.client file!"
+cp .client src/
+cd src/
+javac client/*.java
+java client.Console
+cd ..
