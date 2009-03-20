@@ -1,5 +1,5 @@
-echo "Running client. Make sure you have the server ip address in the 
-.client file!"
+echo "Running client. Make sure you have the server IP address in the .client file! Press any key to continue..."
+read cont
 cp .client src/
 cd src/
 javac client/*.java

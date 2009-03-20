@@ -13,3 +13,6 @@ cd udauction/
 
 5. Compile and run client (in a new terminal):
 ./run-client
+
+6. For list of valid commands, examine server/ServerProtocol.java .
+Alternatively you can examine/execute client/ConsoleTester.java
