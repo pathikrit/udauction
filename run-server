@@ -4,4 +4,4 @@ cd src/
 javac server/*.java
 java server.Server
 cd ..
-find . -name \*.tmp | xargs rm
+find . -name \*.class | xargs rm
