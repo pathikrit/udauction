@@ -3,5 +3,6 @@ cp .server src/
 cd src/
 javac server/*.java
 java server.Server
+rm .server
 cd ..
 find . -name \*.class | xargs rm

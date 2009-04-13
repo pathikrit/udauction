@@ -5,4 +5,5 @@ cp .client src/
 cd src/
 javac client/*.java
 java client.Console
+rm .client
 cd ..
