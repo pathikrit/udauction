@@ -7,11 +7,12 @@ import java.util.Scanner;
 public class ConsoleTester extends Console {
 
 	public static void main(String[] args) {
-		ConsoleTester ct = new ConsoleTester();
-		ct.execute();
+		readConfig(CONFIG_FILE);
+		connectToServer();
+		execute();
 	}
 	
-	public void execute() {
+	public static void execute() {
 		Scanner cmd = new Scanner(						
 						"create_auction a1\n" +
 						"add_item i1\n" +
@@ -22,6 +23,7 @@ public class ConsoleTester extends Console {
 						"login linh test2\n" +
 						"login linh test\n" +						
 						"add_item i1\n" +
+						"login linh test\n" +
 						"join_auction a0\n" +
 						"create_auction a1\n" +
 						"join_auction a2\n" +

@@ -6,37 +6,37 @@ import java.util.HashMap;
 import auction.Auction;
 import auction.Bidder;
 
-public class UserData { // TODO: make this class extend a HashMap
-	
-	private HashMap<String, Object> data = new HashMap<String, Object>();
-	
+public class UserData extends HashMap<String, Object> {
+
+	private static final long serialVersionUID = 6097804409259693848L;
+
 	public UserData() {
-		data.put("LOGGED_IN", false);
+		put("LOGGED_IN", false);
 		HashSet<Auction> auctions = new HashSet<Auction>();
 		HashSet<Bidder> bidders = new HashSet<Bidder>();
-		data.put("CREATED_AUCTIONS", auctions);
-		data.put("BIDDERS", bidders);
-		data.put("EXIT", false);
+		put("CREATED_AUCTIONS", auctions);
+		put("BIDDERS", bidders);
+		put("EXIT", false);
 	}
 	
 	public void setUserName(String username) {
-		data.put("USERNAME", username);
+		put("USERNAME", username);
 	}
 	
 	public String getUserName() {
-		return (String)data.get("USERNAME");
+		return (String)get("USERNAME");
 	}
 	
 	public void setLoggedIn(boolean loggedIn) {
-		data.put("LOGGED_IN", loggedIn);
+		put("LOGGED_IN", loggedIn);
 	}
 	
 	public boolean isLoggedIn() {
-		return (Boolean)data.get("LOGGED_IN");
+		return (Boolean)get("LOGGED_IN");
 	}
 	
 	public void joinAuction(Auction auction) {
-		data.put("CURRENT_AUCTION", auction);
+		put("CURRENT_AUCTION", auction);
 	}
 	
 	public Auction leaveAuction() {
@@ -46,43 +46,43 @@ public class UserData { // TODO: make this class extend a HashMap
 	}
 	
 	public Auction getCurrentAuction() {
-		return (Auction)data.get("CURRENT_AUCTION");
+		return (Auction)get("CURRENT_AUCTION");
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void addAuction(Auction auction) {
-		((HashSet<Auction>)data.get("CREATED_AUCTIONS")).add(auction);
+		((HashSet<Auction>)get("CREATED_AUCTIONS")).add(auction);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void deleteAuction(Auction auction) {
-		((HashSet<Auction>)data.get("CREATED_AUCTIONS")).remove(auction);
+		((HashSet<Auction>)get("CREATED_AUCTIONS")).remove(auction);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void addBidder(Bidder bidder) {
-		((HashSet<Bidder>)data.get("BIDDERS")).add(bidder);
+		((HashSet<Bidder>)get("BIDDERS")).add(bidder);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void removeBidder(Bidder bidder) {
-		((HashSet<Bidder>)data.get("BIDDERS")).remove(bidder);
+		((HashSet<Bidder>)get("BIDDERS")).remove(bidder);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public HashSet<Bidder> getBidders() {
-		return ((HashSet<Bidder>)data.get("BIDDERS"));
+		return ((HashSet<Bidder>)get("BIDDERS"));
 	}
 	
 	public boolean equals(UserData data) {
-		return getUserName().equals(data.getUserName()); 
+		return getUserName().equals(getUserName()); 
 	}
 	
 	public void setExit(boolean exit) {
-		data.put("EXIT", exit);
+		put("EXIT", exit);
 	}
 	
 	public boolean isExit() {
-		return (Boolean)data.get("EXIT");
+		return (Boolean)get("EXIT");
 	}
 }

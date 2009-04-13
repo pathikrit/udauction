@@ -2,20 +2,20 @@ package server.user;
 
 import java.util.HashMap;
 
-public class LoginManager {
-
-	private HashMap<String, String> passwordTable = new HashMap<String, String>();
+public class LoginManager extends HashMap<String, String> {	
 
 	//TODO: keep track of logins, ip
-	
+
+	private static final long serialVersionUID = -5642763143311195185L;
+
 	public boolean login(String username, String hash) {		
-		return passwordTable.containsKey(username) && passwordTable.get(username).equals(hash);
+		return containsKey(username) && get(username).equals(hash);
 	}
 	
 	public boolean register(String username, String hash) {
-		if(passwordTable.containsKey(username))
+		if(containsKey(username))
 			return false;
-		passwordTable.put(username, hash);		
+		put(username, hash);		
 		return true;
 	}
 	

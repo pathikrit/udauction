@@ -16,8 +16,7 @@ public class ServerThread extends Thread {
 	private Socket clientSocket;
 	
 //	private static LoginManager loginManager = new LoginManager();
-	private static DisplayManager displayManager;
-	private static ServerProtocol serverProtocol = new ServerProtocol();
+	private DisplayManager displayManager;
 	private User user = new User();
 
 	public ServerThread(Socket clientSocket) {
@@ -39,7 +38,7 @@ public class ServerThread extends Thread {
 				
 				// TODO: restructure all outs to DisplayManager
 				try {
-					out.println(serverProtocol.processCommand(in.nextLine(), user));
+					out.println(ServerProtocol.processCommand(in.nextLine(), user));
 				} catch(NoSuchElementException nsee) {
 					System.out.println("Client ended communication");
 					break;

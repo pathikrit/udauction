@@ -12,21 +12,18 @@ import java.io.IOException;
 
 public class Console {
 
-	private static final String CONFIG_FILE = ".client";
+	protected static final String CONFIG_FILE = ".client";
 	
-	private String server;
-	private int port;
-	protected Socket serverSocket;
+	private static String server;
+	private static int port;
+	protected static Socket serverSocket;	
 	
-	public Console() {
-		readConfig(CONFIG_FILE);
-		connectToServer();
-	}
 	// TODO lib package for common libraries e.g. parsing input file in Util.java
 	// TODO System.exit(-1)
 	// TODO JUnit testing
+	// TODO Check the static execute later
 	
-	public void execute() {
+	public static void execute() {
 		Scanner cmd = new Scanner(System.in);
 		String c = "";		
 		do {		
@@ -54,7 +51,7 @@ public class Console {
 		}
 	}
 	
-	public void connectToServer() {		
+	public static void connectToServer() {		
 		try {
 			serverSocket = new Socket(server, port);
 		} catch (UnknownHostException e) {
@@ -70,7 +67,7 @@ public class Console {
 	
 	//TODO: merge all readConfigs into util 
 	
-	public void readConfig(String file) {
+	public static void readConfig(String file) {
 		try {
 			for(Scanner sc = new Scanner(new File(file)); sc.hasNextLine(); ) {
 				String line = sc.nextLine().trim();
@@ -91,7 +88,8 @@ public class Console {
 	
 	public static void main(String[] args) {
 		// TODO args[0] can be used to overwrite default config file
-		Console c = new Console();
-		c.execute();
+		readConfig(CONFIG_FILE);
+		connectToServer();
+		execute();
 	}
 }

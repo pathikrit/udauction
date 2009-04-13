@@ -8,7 +8,7 @@ import server.user.UserData;
 
 public class DisplayManager {
 	
-	PrintWriter out;
+	private PrintWriter out;
 	
 	public DisplayManager(PrintWriter out) {
 		this.out = out;

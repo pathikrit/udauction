@@ -11,7 +11,7 @@ import server.user.UserData;
 
 public class ServerProtocol {
 	
-	private String commands[][] = {
+	private static String commands[][] = {
 			{"HELP"},
 			{"REGISTER", "username", "password", "confirm_password"},
 			{"LOGIN", "username", "password"},						
@@ -25,12 +25,11 @@ public class ServerProtocol {
 			//TODO: list_items, info <name>, list_auctions, etc.
 	};
 	
-	private static LoginManager loginManager = new LoginManager();
-	private HashMap<String, UserData> userTable = new HashMap<String, UserData>();
-	private static AuctionManager auctionManager = new AuctionManager();
+	private static HashMap<String, UserData> userTable = new HashMap<String, UserData>();	
+	private static LoginManager loginManager = new LoginManager(); 
 	
 	// TODO: nicer returns
-	public String processCommand(String line, User user) {
+	public static synchronized String processCommand(String line, User user) {
 		UserData data = user.getData();
 		String split[] = validate(line);
 		Auction auction = null;
@@ -47,6 +46,7 @@ public class ServerProtocol {
 				if(data.isLoggedIn())
 					return "You are already logged in!";
 				data.setLoggedIn(true);
+				data.setUserName(split[1]);
 				return "Login Succesful!";
 			} else {
 				return "Username/password does not exist";
@@ -69,14 +69,14 @@ public class ServerProtocol {
 		
 		if(data.isLoggedIn()) {
 			if(split[0].equalsIgnoreCase("CREATE_AUCTION")) {
-				if ((auction = auctionManager.createAuction(split[1], user)) == null) {
+				if ((auction = AuctionManager.createAuction(split[1], user)) == null) {
 					return "The auction name is taken";
 				} else {
 					data.addAuction(auction);
 					return "Succesfully created an auction " + split[1];
 				}
 			} else if(split[0].equalsIgnoreCase("JOIN_AUCTION")) {
-				if ((auction = auctionManager.getAuction(split[1], user)) == null) {
+				if ((auction = AuctionManager.getAuction(split[1], user)) == null) {
 					return "You are not allowed to join this auction";
 				} else {
 					data.joinAuction(auction); // TODO: modify userdata for current user
@@ -156,7 +156,7 @@ public class ServerProtocol {
 	 * splits line if line is a valid command
 	 * else, returns null
 	 */
-	private String[] validate(String line) {
+	private static String[] validate(String line) {
 		String split[] = line.split("\\s");
 		for(String c[] : commands)
 			if(c[0].equalsIgnoreCase(split[0]) && (c[c.length-1].equals("...") || c.length == split.length)) {

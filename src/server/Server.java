@@ -11,23 +11,12 @@ import java.io.IOException;
 
 public class Server {	
 	
-	private ServerSocket serverSocket;
-	private int serverPort;
+	private static ServerSocket serverSocket;
+	private static int serverPort;
 	private static final String CONFIG_FILE = ".server";		
 	
-	public Server() {
-		readConfig(CONFIG_FILE);
-		try {
-			serverSocket = new ServerSocket(serverPort);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}	
-	}
-	
 	//TODO: Auto discovery of server
-	public void listen() {		
+	public static void listen() {		
 		boolean listening = true;
 		// TODO another thread for listening to command line for exit command
 		try {
@@ -46,7 +35,7 @@ public class Server {
 		}
 	}
 		
-	public void readConfig(String file) {
+	public static void readConfig(String file) {
 		try {
 			for(Scanner sc = new Scanner(new File(file)); sc.hasNextLine(); ) {
 				String line = sc.nextLine().trim();				
@@ -63,11 +52,22 @@ public class Server {
 		}
 	}
 	
+	public static void runServer() {
+		try {
+			serverSocket = new ServerSocket(serverPort);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
+	}
+	
+	//TODO: Decrease permissions as much as possible e.g. all methods here should be private
 	public static void main(String cmdLine[]) {
 		// TODO args[0] can be used to overwrite default config file
-		// TODO rename all dot files to .config 
-		Server s = new Server();
-		s.listen();
+		// TODO rename all dot files to .config
+		readConfig(CONFIG_FILE);
+		runServer();
+		listen();
 	}
 	
 }
