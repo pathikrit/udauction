@@ -60,21 +60,13 @@ public class Auction {
 	}
 	
 	public boolean deleteItem(User user, String id) {
-		if(items.containsKey(id)) {
-			if(items.get(id).deleteItem(user)) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return items.containsKey(id) && items.get(id).deleteItem(user);
 	}
 	
 	public String listItems() {
 		String ret = "";
 		for(Item it: items.values())
-			ret = "{" + it + ":" + it.getMatched() + "=" + it.getV() + "}";
+			ret = "{" + it + ": " + it.getMatched() + " = " + it.getV() + "}";
 		return ret;
 	}
 	
@@ -99,22 +91,21 @@ public class Auction {
 				return false;
 			}
 		}
-		if(!groupBid(group)) {
+		if(!groupBid(group))
 			return false;
+		
+		AuctionAlgorithm.matchBidder(bidder);		
+		if(bidder.getMatched().equals(AuctionAlgorithm.DUMMY)) {
+			// do nothing
+		} else if (bidders.contains(AuctionAlgorithm.DUMMY.getMatched())) {
+			user.getData().addBidder(bidder);
+			AuctionAlgorithm.DUMMY.getMatched().getUser().getData().removeBidder(AuctionAlgorithm.DUMMY.getMatched());
+			bidders.remove(AuctionAlgorithm.DUMMY.getMatched());			
 		} else {
-			AuctionAlgorithm.matchBidder(bidder);		
-			if(bidder.getMatched().equals(AuctionAlgorithm.DUMMY)) {
-				// do nothing
-			} else if (bidders.contains(AuctionAlgorithm.DUMMY.getMatched())) {
-				user.getData().addBidder(bidder);
-				AuctionAlgorithm.DUMMY.getMatched().getUser().getData().removeBidder(AuctionAlgorithm.DUMMY.getMatched());
-				bidders.remove(AuctionAlgorithm.DUMMY.getMatched());			
-			} else {
-				user.getData().addBidder(bidder);
-				bidders.add(bidder);
-			}
-			return true;
+			user.getData().addBidder(bidder);
+			bidders.add(bidder);
 		}
+		return true;		
 	}
 	
 	public boolean groupBid(ArrayList<Item> group) {

@@ -26,15 +26,11 @@ public class Bidder {
 	
 	private Auction auction;
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
-	private Item matched; // DO NOT MATCH TO DUMMY!
+	private Item matched; // do not match to dummy!
 	private User user;
 	
 	@SuppressWarnings("unused")
 	private int u = 0, shift = 0;
-	
-//	public Bidder() {
-//		this(null); // TODO: we need this? PROLLY NOT
-//	}
 	
 	public Bidder(User user, Auction auction) {
 		this.user = user;

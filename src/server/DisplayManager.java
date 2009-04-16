@@ -46,17 +46,17 @@ public class DisplayManager {
 				displayString +=
 					"> logout\n"; 
 			}
-		} else {
-			if(data.isHelp())
+		} else if(data.isHelp()) {
 				displayString += "Available commands (# - not implemented):\n" +
 					"> login <username> <password>\n" +
 					"> register <username> <password> <confirm_password>\n";
 		}
-		if(data.isHelp())
+		if(data.isHelp()) {
 			displayString += 
 					"> help_on\n" +
 					"> help_off\n" +
 					"> exit\n";
+		}
 		displayString += "bye";
 		out.println(displayString);	
 		out.flush();

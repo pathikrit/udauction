@@ -8,7 +8,7 @@ public class AuctionManager extends HashMap<String, Auction> {
 
 	// TODO: structure the program such that all permission checking of actions is done in one PermissionChecker class.
 	
-	private static final long	serialVersionUID	= 1024660891804044046L;
+	private static final long serialVersionUID = 1024660891804044046L;
 
 	public Auction createAuction(String auctionName, User auctionAdmin) {
 		auctionName = auctionName.toLowerCase();		
