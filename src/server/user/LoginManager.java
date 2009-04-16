@@ -13,6 +13,8 @@ public class LoginManager extends HashMap<String, String> {
 	}
 	
 	public boolean register(String username, String hash) {
+		if(username.equalsIgnoreCase("DUMMY"))
+			return false;
 		if(containsKey(username)) {
 			return false;
 		} else {

@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 
 import auction.Bidder;
 
-import server.user.UserData;
+import server.user.User;
 
 public class DisplayManager {
 	
@@ -15,13 +15,14 @@ public class DisplayManager {
 	}
 	
 	//TODO: nicer print outs
-	public String display(UserData data) {
-		String displayString = "\n";
-		if(data.isLoggedIn()) {
-			for(Bidder bidder: data.getBidders()) {
+	public String display(User user) {
+		String displayString = "";
+		if(user.isLoggedIn()) {
+			displayString += "\n";
+			for(Bidder bidder: user.getData().getBidders()) {				
 				displayString += "You are matched to " + bidder.getMatched() + " in auction " + bidder.getAuction() + " for price " + bidder.getMatched().getV() + "\n";
 			}
-			if(data.isHelp()) {
+			if(user.isHelp()) {
 				displayString += "Available commands (# - not implemented):\n" +
 				   "> change_password <old_password> <new_password> <confirm_new_password>\n" +
 				   "> create_auction <auction_name>\n" +
@@ -31,7 +32,7 @@ public class DisplayManager {
 				   "> join_auction <auction_name>\n" +
 				   "> info_user <username>\n" +
 				   "> status\n";
-				if(data.isInAuction()) {
+				if(user.isInAuction()) {
 					displayString +=
 					"> leave_auction\n" +
 					"> add_item <item_name> <deadline> <extended_deadline>\n" +
@@ -46,12 +47,12 @@ public class DisplayManager {
 				displayString +=
 					"> logout\n"; 
 			}
-		} else if(data.isHelp()) {
+		} else if(user.isHelp()) {
 				displayString += "Available commands (# - not implemented):\n" +
 					"> login <username> <password>\n" +
 					"> register <username> <password> <confirm_password>\n";
 		}
-		if(data.isHelp()) {
+		if(user.isHelp()) {
 			displayString += 
 					"> help_on\n" +
 					"> help_off\n" +

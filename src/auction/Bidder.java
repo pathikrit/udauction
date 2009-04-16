@@ -2,7 +2,7 @@ package auction;
 
 import java.util.LinkedHashSet;
 
-import server.user.User;
+import server.user.UserData;
 import lib.Pair;
 
 // TODO: Make sure all imports are standardly arranged
@@ -27,18 +27,18 @@ public class Bidder {
 	private Auction auction;
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
 	private Item matched; // do not match to dummy!
-	private User user;
+	private UserData userData;	
 	
 	@SuppressWarnings("unused")
 	private int u = 0, shift = 0;
 	
-	public Bidder(User user, Auction auction) {
-		this.user = user;
+	public Bidder(UserData userData, Auction auction) {
+		this.userData = userData;
 		this.auction = auction;
 	}
 	
-	public User getUser() {
-		return user;
+	public UserData getUserData() {
+		return userData;
 	}
 	
 	public void addBid(Item item, int weight) {		
@@ -70,6 +70,6 @@ public class Bidder {
 	}
 	
 	public String toString() {
-		return user.toString();
+		return bids.toString();
 	}
 }

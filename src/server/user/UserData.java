@@ -1,25 +1,33 @@
 package server.user;
 
 import java.util.HashSet;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import auction.Auction;
 import auction.Bidder;
+import auction.Item;
 
-public class UserData extends HashMap<String, Object> {
+public class UserData extends LinkedHashMap<String, Object> {
 
 	private static final long serialVersionUID = 6097804409259693848L;
 
 	//TODO: take all non-shared data outside to user
 	
 	public UserData() {
-		put("LOGGED_IN", false);
-		put("HELP", true);
+		setUserName("");
 		HashSet<Auction> auctions = new HashSet<Auction>();
 		HashSet<Bidder> bidders = new HashSet<Bidder>();
+		HashSet<Item> items = new HashSet<Item>();
+		HashSet<Item> won_items = new HashSet<Item>();
 		put("CREATED_AUCTIONS", auctions);
-		put("BIDDERS", bidders);
-		put("EXIT", false);
+		put("BIDS", bidders);
+		put("SELL_ITEMS", items);
+		put("WON_ITEMS", won_items);
+	}
+	
+	public UserData(String username) {
+		this();
+		setUserName(username);		
 	}
 	
 	public void setUserName(String username) {
@@ -29,47 +37,7 @@ public class UserData extends HashMap<String, Object> {
 	public String getUserName() {
 		return (String)get("USERNAME");
 	}
-	
-	public void login() {
-		put("LOGGED_IN", true);
-	}
-	
-	public void logout() {
-		put("LOGGED_IN", false);
-	}
-	
-	public void setHelp() {
-		put("HELP", true);
-	}
-	
-	public void clearHelp() {
-		put("HELP", false);
-	}
-	
-	public boolean isHelp() {
-		return (Boolean)get("HELP");
-	}
-	
-	public boolean isLoggedIn() {
-		return (Boolean)get("LOGGED_IN");
-	}
-	
-	public void joinAuction(Auction auction) {
-		put("CURRENT_AUCTION", auction);
-	}
-	
-	public void leaveAuction() {
-		joinAuction(null);
-	}
-	
-	public boolean isInAuction() {
-		return (getCurrentAuction() != null);
-	}
-	
-	public Auction getCurrentAuction() {
-		return (Auction)get("CURRENT_AUCTION");
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void addAuction(Auction auction) {
 		((HashSet<Auction>)get("CREATED_AUCTIONS")).add(auction);
@@ -82,36 +50,54 @@ public class UserData extends HashMap<String, Object> {
 	
 	@SuppressWarnings("unchecked")
 	public void addBidder(Bidder bidder) {
-		((HashSet<Bidder>)get("BIDDERS")).add(bidder);
+		((HashSet<Bidder>)get("BIDS")).add(bidder);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void removeBidder(Bidder bidder) {
-		((HashSet<Bidder>)get("BIDDERS")).remove(bidder);
+		((HashSet<Bidder>)get("BIDS")).remove(bidder);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public HashSet<Bidder> getBidders() {
-		return ((HashSet<Bidder>)get("BIDDERS"));
+		return ((HashSet<Bidder>)get("BIDS"));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addSellItem(Item item) {
+		((HashSet<Item>)get("SELL_ITEMS")).add(item);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void removeSellItem(Item item) {
+		((HashSet<Item>)get("SELL_ITEMS")).remove(item);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashSet<Item> getSellItem() {
+		return ((HashSet<Item>)get("SELL_ITEMS"));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addWonItem(Item item) {
+		((HashSet<Item>)get("WON_ITEM")).add(item);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void removeWonItem(Item item) {
+		((HashSet<Item>)get("WON_ITEM")).remove(item);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashSet<Item> getWonItem() {
+		return ((HashSet<Item>)get("WON_ITEM"));
 	}
 	
 	public boolean equals(UserData data) {
-		return getUserName().equals(getUserName()); 
-	}
-	
-	public void setExit(boolean exit) {
-		put("EXIT", exit);
-	}
-	
-	public boolean isExit() {
-		return (Boolean)get("EXIT");
+		return getUserName().equals(data.getUserName());
 	}
 	
 	public String getUserInfo() {
 		return getUserName();
-	}
-	
-	public String getStatus() {
-		return toString();
 	}
 }

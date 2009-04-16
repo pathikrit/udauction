@@ -32,7 +32,8 @@ public class ServerProtocol {
 		{"LEAVE_AUCTION"},
 		// TODO: add support for optional: starting time[def:0], starting price[def:0], reserved price[def:0]
 		{"ADD_ITEM", "item_name", "deadline", "extended_deadline", "..."},
-		{"ADD_ITEMS", "item_name", "..."}, // TODO: not implemented
+		// In this case no optional fields can be included: it_name, dline, exline, it_name, dline, exline, ...
+		{"ADD_ITEMS", "item_name", "deadline", "extended_deadline", "..."},
 		{"DELETE_ITEM", "item_name"}, // only if the item is not auctioned yet
 		{"LIST_ITEMS"},
 		{"INFO_ITEM", "item_name"},
@@ -57,19 +58,23 @@ public class ServerProtocol {
 		// TODO: put user's login ip address in userdata & user
 		// TODO: every command has its own handler method
 		if(split[0].equalsIgnoreCase("HELP_ON")) {
-			data.setHelp();
+			user.setHelp();
 			return "Help is on";
 		} else if(split[0].equalsIgnoreCase("HELP_OFF")) {
-			data.clearHelp();
+			user.clearHelp();
 			return "Help is off";
 		} else if(split[0].equalsIgnoreCase("LOGIN")) {
 			if(loginManager.login(split[1], split[2])) {
-				if (userTable.containsKey(split[1]))
+				if (userTable.containsKey(split[1])) {
 					data = userTable.get(split[1]);
 					user.setData(data);
-				if(data.isLoggedIn())
-					return "You are already logged in!";
-				data.login();				
+				} else {
+					userTable.put(split[1], data);
+				}
+				data.setUserName(split[1]);
+//				if(split[1].equals(data.getUserName()))
+//					return "You are already logged in!";
+				user.login();
 				return "Login Succesful!";
 			} else {
 				return "Username/password does not exist";
@@ -77,7 +82,7 @@ public class ServerProtocol {
 		} else if(split[0].equalsIgnoreCase("REGISTER")) {
 			if(split[2].equals(split[3])) {
 				if(loginManager.register(split[1], split[2])) {
-					data.setUserName(split[1]);
+					userTable.put(split[1], new UserData(split[1]));
 					return "Succesfully registered";
 				} else {
 					return "Username taken";
@@ -86,13 +91,14 @@ public class ServerProtocol {
 				return "Passwords do not match";
 			} 
 		} else if(split[0].equalsIgnoreCase("EXIT")) {
-			data.logout();
-			data.setExit(true);
+			user.logout();
+			user.setData(null);
+			user.setExit();
 			return "Bye Bye!!!";			
 		}
 		
 		// After login
-		if(data.isLoggedIn()) {
+		if(user.isLoggedIn()) {
 			if (split[0].equalsIgnoreCase("CHANGE_PASSWORD")) {
 				if (split[2].equals(split[3])) {
 					if (loginManager.changePassword(data.getUserName(), split[1], split[2])) {
@@ -104,7 +110,7 @@ public class ServerProtocol {
 					return "New passwords do not match";
 				}				
 			} else if(split[0].equalsIgnoreCase("CREATE_AUCTION")) {
-				if ((auction = auctionManager.createAuction(split[1], user)) == null) {
+				if ((auction = auctionManager.createAuction(split[1], data)) == null) {
 					return "The auction name is taken";
 				} else {
 					data.addAuction(auction);
@@ -115,57 +121,65 @@ public class ServerProtocol {
 			} else if(split[0].equalsIgnoreCase("INFO_AUCTION")) {
 				return auctionManager.getInfo(split[1]);
 			} else if(split[0].equalsIgnoreCase("JOIN_AUCTION")) {
-				if ((auction = auctionManager.getAuction(split[1], user)) == null) {
+				if ((auction = auctionManager.getAuction(split[1], data)) == null) {
 					return "You are not allowed to join this auction";
 				} else {
-					data.joinAuction(auction); // TODO: modify userdata for current user
+					user.joinAuction(auction); // TODO: modify userdata for current user
 					return "Succesfully joined an auction " + split[1];
 				}
 			} else if(split[0].equalsIgnoreCase("INFO_USER")) {
-				return userTable.get(split[1]).getUserInfo();
+				if (userTable.containsKey(split[1])) {
+					return userTable.get(split[1]).getUserInfo();
+				} else {
+					return "This user does not exist";
+				}				
 			} else if(split[0].equalsIgnoreCase("STATUS")) {
-				return data.getStatus();
+				return user.getStatus();
 			} else if(split[0].equalsIgnoreCase("LOGOUT")) {
-				data.leaveAuction();
-				data.logout(); //TODO: user.logout() and user.login()				
+				user.leaveAuction();
+				user.setData(new UserData());
+				user.logout(); //TODO: user.logout() and user.login()				
 				return "Successfully logged out!";
 			}
 			
 			// After join_auction
-			if (data.isInAuction()) {
-				auction = data.getCurrentAuction();
+			if (user.isInAuction()) {
+				auction = user.getCurrentAuction();
 				if(split[0].equalsIgnoreCase("LEAVE_AUCTION")) {
-					data.leaveAuction();
+					user.leaveAuction();
 					return "You successfully left auction " + auction;
 				} else if(split[0].equalsIgnoreCase("ADD_ITEM")) {
-					auction = data.getCurrentAuction();
-					if(auction.addItem(user, split[1], split[2], split[3])) {
-						return "You added item " + split[1] + " to auction " + auction;
+					if(auction.addItem(data, split[1], split[2], split[3])) {
+						return "You added item " + split[1] + " to auction the current auction";
 						// TODO: auto-generate item ids
 					} else {
 						return "There is another item with same item name " + split[1] + " in the current auction";
 					}
-//				} else if(split[0].equalsIgnoreCase("ADD_ITEMS")) {
-//					auction = data.getCurrentAuction();
-//					String msg = "";				
-//					int c = 0;
-//					for(int i = 1; i < split.length; i++) {
-//						if(auction.addItem(split[i])) {
-//							msg += "You added item " + split[i] + " to auction " + auction;
-//							c++;
-//							// TODO: auto-generate item ids
-//						} else {
-//							msg += "There is another item with same item name " + split[i] + " in the current auction";
-//						}
-//						msg += "\n";												
-//					}
-//					if(c > 0)
-//						msg += "Successfully added " + c + " items";
-//					else
-//						msg += "Failed to add an item";
-//					return msg;
+				} else if(split[0].equalsIgnoreCase("ADD_ITEMS")) {
+					String msg = "";				
+					int c = 0;
+					if ((split.length-1) % 3 == 0) {
+						for(int i = 1; i < split.length; i+= 3) {
+							if(auction.addItem(data, split[i], split[i+1], split[i+2])) {
+								msg += "You added an item " + split[i] + " to the current auction";
+								c++;
+								// TODO: auto-generate item ids
+							} else {
+								msg += "There is another item with the same item name " + split[i] + " in the current auction";
+							}
+							msg += "\n";
+						}
+						if(c > 0) {
+							msg += "Successfully added " + c + " items";
+						} else {
+							msg += "Failed to add an item";
+						}
+						return msg;
+					} else {
+						return "BAD COMMAND!";
+					}
 				} else if(split[0].equalsIgnoreCase("DELETE_ITEM")) {
-					if (auction.deleteItem(user, split[1])) {
+					if (auction.deleteItem(data, split[1])) {
 						return "Succesfully deleted an item";
 					} else {
 						return "Failed to delete an item";
@@ -190,7 +204,7 @@ public class ServerProtocol {
 							return "BAD COMMAND!";
 						}							
 					}						
-					if(auction.addBidder(user, ids, weights)) {
+					if(auction.addBidder(data, ids, weights)) {
 						return "Successfully group bid on " + n + " items";
 					} else {
 						return "Group bid failed";					

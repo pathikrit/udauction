@@ -3,12 +3,12 @@ package auction;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import server.user.User;
+import server.user.UserData;
 import static lib.Util.INFINITY;
 
 public class AuctionAlgorithm {
 	
-	protected static final Item DUMMY = new Item(new User(), "DUMMY");
+	protected static final Item DUMMY = new Item(new UserData("DUMMY"), "DUMMY");
 	
 	// TODO: recursive insertion
 	// TODO: change_bid

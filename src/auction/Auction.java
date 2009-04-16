@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
-import server.user.User;
+import server.user.UserData;
 
 public class Auction {
 	
 	private String name;
-	private User auctionAdmin;
+	private UserData auctionAdmin;
 	
 	// TODO: change all public to protected when needed
 	
 	private LinkedHashSet<Bidder> bidders = new LinkedHashSet<Bidder>();
 	private LinkedHashMap<String, Item> items = new LinkedHashMap<String, Item>();
 	
-	public Auction(String name, User auctionAdmin) {
+	public Auction(String name, UserData auctionAdmin) {
 		this.name = name;
 		this.auctionAdmin = auctionAdmin;
 	}
@@ -25,11 +25,11 @@ public class Auction {
 		return name;
 	}
 	
-	public User getAuctionAdmin() {
+	public UserData getAuctionAdmin() {
 		return auctionAdmin;
 	}
 	
-	public boolean canJoin(User user) {
+	public boolean canJoin(UserData user) {
 		return true;
 	}
 
@@ -41,32 +41,39 @@ public class Auction {
 		return items;
 	}
 	
-	public boolean addItem(User user, String id) {
+	public boolean addItem(UserData userData, String id) {
 		if(items.containsKey(id))
 			return false;
-		items.put(id, new Item(user, id));
+		items.put(id, new Item(userData, id));
 		return true;
 	}
 	
-	public boolean addItem(User user, String id, String deadline, String extended_deadline) {
+	public boolean addItem(UserData userData, String id, String deadline, String extended_deadline) {
 		if(items.containsKey(id))
 			return false;
 		try {
-			items.put(id, new Item(user, id, Long.parseLong(deadline), Long.parseLong(extended_deadline)));
+			Item item = new Item(userData, id, Long.parseLong(deadline), Long.parseLong(extended_deadline));
+			items.put(id, item);
+			userData.addSellItem(item);
 		} catch (NumberFormatException e){
 			return false;
 		}
 		return true;
 	}
 	
-	public boolean deleteItem(User user, String id) {
-		return items.containsKey(id) && items.get(id).deleteItem(user);
+	public boolean deleteItem(UserData userData, String id) {
+		return items.containsKey(id) && items.get(id).deleteItem(userData);
 	}
 	
 	public String listItems() {
 		String ret = "";
-		for(Item it: items.values())
-			ret = "{" + it + ": " + it.getMatched() + " = " + it.getV() + "}";
+		for(Item it: items.values()) {
+			if (it.getMatched() != null) {
+				ret += "{" + it + ": " + it.getMatched().getUserData().getUserName() + "=" + it.getV() + "}";
+			} else {
+				ret += "{" + it + ": " + it.getMatched() + "=" + it.getV() + "}";
+			}
+		}
 		return ret;
 	}
 	
@@ -78,8 +85,8 @@ public class Auction {
 		}
 	}
 	
-	public boolean addBidder(User user, String ids[], int weights[]) {
-		Bidder bidder = new Bidder(user, this);
+	public boolean addBidder(UserData userData, String ids[], int weights[]) {
+		Bidder bidder = new Bidder(userData, this);
 		ArrayList<Item> group = new ArrayList<Item>();
 		for(int i = 0; i < ids.length; i++) {
 			if (items.containsKey(ids[i])) {
@@ -98,11 +105,11 @@ public class Auction {
 		if(bidder.getMatched().equals(AuctionAlgorithm.DUMMY)) {
 			// do nothing
 		} else if (bidders.contains(AuctionAlgorithm.DUMMY.getMatched())) {
-			user.getData().addBidder(bidder);
-			AuctionAlgorithm.DUMMY.getMatched().getUser().getData().removeBidder(AuctionAlgorithm.DUMMY.getMatched());
+			userData.addBidder(bidder);
+			AuctionAlgorithm.DUMMY.getMatched().getUserData().removeBidder(AuctionAlgorithm.DUMMY.getMatched());
 			bidders.remove(AuctionAlgorithm.DUMMY.getMatched());			
 		} else {
-			user.getData().addBidder(bidder);
+			userData.addBidder(bidder);
 			bidders.add(bidder);
 		}
 		return true;		

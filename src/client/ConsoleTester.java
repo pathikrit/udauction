@@ -21,6 +21,7 @@ public class ConsoleTester extends Console {
 					"login linh\n" +
 					"register linh test test2\n" +
 					"register linh test test\n" +
+					"register rick t1 t1\n" +
 					"login linh test2\n" +
 					"login linh test\n" +						
 					"add_item i1\n" +
@@ -28,7 +29,13 @@ public class ConsoleTester extends Console {
 					"join_auction a0\n" +
 					"create_auction a1\n" +
 					"join_auction a2\n" +
+					"change_password test test2 test2\n" +
+					"list_auctions\n" +
+					"info rick\n" +
+					"info_user rick\n" +
+					"status\n" +
 					"create_auction a2\n" +
+					"info_auction a1\n" +
 					"join_auction a1\n" +
 					"login linh test\n" +
 					"add_item i1\n" +
@@ -41,7 +48,15 @@ public class ConsoleTester extends Console {
 					"bid i1 10 i2\n" +
 					"bid i1 1 i2 20 i4 40\n" +
 					"bid i1 20 i2 10\n" +
+					"add_items i1 2000 3000 i2 3220 2039 i3 3920 2910\n" +
 					"list_items\n" +
+					"info_item a1\n" +
+					"info_item i1\n" +
+					"info_item i2\n" +
+					"info_item i3\n" +
+					"status\n" +
+					"logout\n" +
+					"login linh test\n" +
 					"\n" +
 					"exit"
 				);

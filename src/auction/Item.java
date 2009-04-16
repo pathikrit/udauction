@@ -1,7 +1,7 @@
 package auction;
 
 import java.util.Date;
-import server.user.User;
+import server.user.UserData;
 
 public class Item {
 	
@@ -12,26 +12,21 @@ public class Item {
 	private int v = 0, startingPrice = 0, reservePrice = 0;
 	private long startingTime, endTime, extendTime;	
 	
-	private User seller;
+	private UserData seller;
 	private Bidder matched;
-	
-	// TODO: comments of time
-//	public Item() {
-//		this(""); //TODO: is this a bug? generate a random id maybe? WAS FOR DUMMY
-//	}
 	
 	// TODO: Can we create two items in an auction with same id? NO!
 	
-	public Item(User user, String id) {
-		this(user, id, Long.MAX_VALUE, 0, System.currentTimeMillis());		
+	public Item(UserData userData, String id) {
+		this(userData, id, Long.MAX_VALUE, 0, 0);		
 	}
 	
-	public Item(User user, String id, long endTime, long extendTime) {
-		this(user, id, endTime, extendTime, System.currentTimeMillis());		
+	public Item(UserData userData, String id, long endTime, long extendTime) {
+		this(userData, id, endTime, extendTime, 0);		
 	}
 	
-	public Item(User user, String id, long endTime, long extendTime, long startTime) {
-		this.seller = user;
+	public Item(UserData userData, String id, long endTime, long extendTime, long startTime) {
+		this.seller = userData;
 		this.id = id;
 		long time = System.currentTimeMillis();
 		this.endTime = time + endTime;
@@ -67,21 +62,26 @@ public class Item {
 		return active;
 	}
 	
-	public boolean deleteItem(User user) {
-		return seller.equals(user) && System.currentTimeMillis() < startingTime;
+	public boolean deleteItem(UserData userData) {
+		return seller.equals(userData) && System.currentTimeMillis() < startingTime;
 	}
 	
 	public String getInfo() {
 		Date startingDate = new Date(startingTime);
 		Date endDate = new Date(endTime);
 		Date extendDate = new Date(extendTime);
+		String ret = 
+			  "Name: " + id + "\n"
+			+ "Price: " + v + "\n"
+			+ "Starting price: " + startingPrice + "\n"
+			+ "Starting time: " + startingDate + "\n"
+			+ "End time: " + endDate + "\n"
+			+ "Extended time: " + extendDate;
+		if (matched != null) {
+			ret += "\nCurrent winner: " + matched.getUserData().getUserName();
+		}
+		return ret;
 		
-		return "Name: " + id + "\n"
-		+ "Price: " + v + "\n"
-		+ "Starting time: " + startingDate + "\n"
-		+ "End time: " + endDate + "\n"
-		+ "Extended time: " + extendDate + "\n"
-		+ "Starting price: " + startingPrice;
 	}
 
 	public String toString() {

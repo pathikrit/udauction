@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
-import server.user.User;
+import server.user.UserData;
 
 public class AuctionTester {
 
@@ -18,7 +18,7 @@ public class AuctionTester {
 	//TODO: make a nicer tester
 	
 	public static void main(String args[]) {
-		auction =  new Auction("Test Auction", new User());
+		auction =  new Auction("Test Auction", new UserData("DUMMY"));
 		items = auction.getItems();
 		bidders = new LinkedHashSet<Bidder>();
 		
@@ -40,12 +40,12 @@ public class AuctionTester {
 		
 			int row = w.length, col = w[0].length;		
 			for (int i = 0; i < row; i++) {
-				Bidder newBidder = new Bidder(new User("B"+i), auction);
+				Bidder newBidder = new Bidder(new UserData("B"+i), auction);
 				for (int j = 0; j < col; j++) {
 					if (items.containsKey("I"+j) && w[i][j] != 0)
 						newBidder.addBid(items.get("I"+j), w[i][j]);
 					else if (w[i][j] != 0){
-						Item newItem = new Item(new User("B"+i), "I"+j);
+						Item newItem = new Item(new UserData("B"+i), "I"+j);
 						items.put("I"+j, newItem);
 						newBidder.addBid(newItem, w[i][j]);
 					}
@@ -86,12 +86,12 @@ public class AuctionTester {
 	
 	@SuppressWarnings("unused")
 	private static Bidder convert(int w[], int i) {
-		Bidder newBidder = new Bidder(new User("B"+i), auction);
+		Bidder newBidder = new Bidder(new UserData("B"+i), auction);
 		for (int j = 0; j < w.length; j++) {
 			if (items.containsKey("I"+j) && items.get("I"+j).isActive() && w[j] != 0)
 				newBidder.addBid(items.get("I"+j), w[j]);
 			else if (w[j] != 0){
-				Item newItem = new Item(new User("B"+i),"I"+j);
+				Item newItem = new Item(new UserData("B"+i),"I"+j);
 				items.put("I"+j, newItem);
 				newBidder.addBid(newItem, w[j]);
 			}

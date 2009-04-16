@@ -2,7 +2,7 @@ package auction;
 
 import java.util.HashMap;
 
-import server.user.User;
+import server.user.UserData;
 
 public class AuctionManager extends HashMap<String, Auction> {
 
@@ -10,7 +10,7 @@ public class AuctionManager extends HashMap<String, Auction> {
 	
 	private static final long serialVersionUID = 1024660891804044046L;
 
-	public Auction createAuction(String auctionName, User auctionAdmin) {
+	public Auction createAuction(String auctionName, UserData auctionAdmin) {
 		auctionName = auctionName.toLowerCase();		
 		if(containsKey(auctionName))
 			return null;
@@ -19,16 +19,16 @@ public class AuctionManager extends HashMap<String, Auction> {
 		return auction;
 	}
 	
-	public boolean deleteAuction(String auctionName, User user) {
+	public boolean deleteAuction(String auctionName, UserData userData) {
 		auctionName = auctionName.toLowerCase();
 		Auction auction = get(auctionName);		
-		return auction != null && auction.getAuctionAdmin().equals(user) && (remove(auctionName) != null);
+		return auction != null && auction.getAuctionAdmin().equals(userData) && (remove(auctionName) != null);
 	}
 	
-	public Auction getAuction(String auctionName, User user) {
+	public Auction getAuction(String auctionName, UserData userData) {
 		auctionName = auctionName.toLowerCase();
 		Auction auction = get(auctionName);
-		if(auction == null || !auction.canJoin(user))
+		if(auction == null || !auction.canJoin(userData))
 			return null;
 		return auction;
 	}

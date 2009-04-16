@@ -33,8 +33,8 @@ public class ServerThread extends Thread {
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			displayManager = new DisplayManager(out);
 			
-			while(!user.getData().isExit()) {			
-				displayManager.display(user.getData());
+			while(!user.isExit()) {			
+				displayManager.display(user);
 				
 				// TODO: restructure all outs to DisplayManager
 				try {
