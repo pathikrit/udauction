@@ -13,12 +13,22 @@ public class LoginManager extends HashMap<String, String> {
 	}
 	
 	public boolean register(String username, String hash) {
-		if(containsKey(username))
+		if(containsKey(username)) {
 			return false;
-		put(username, hash);		
-		return true;
+		} else {
+			put(username, hash);		
+			return true;
+		}
 	}
 	
-	//TODO: public boolean changePassword()
+	public boolean changePassword(String username, String old_hash, String new_hash) {
+		if (containsKey(username) && get(username).equals(old_hash)) {
+			put(username, new_hash);		
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	//TODO: logout()
 }

@@ -10,8 +10,11 @@ public class UserData extends HashMap<String, Object> {
 
 	private static final long serialVersionUID = 6097804409259693848L;
 
+	//TODO: take all non-shared data outside to user
+	
 	public UserData() {
 		put("LOGGED_IN", false);
+		put("HELP", true);
 		HashSet<Auction> auctions = new HashSet<Auction>();
 		HashSet<Bidder> bidders = new HashSet<Bidder>();
 		put("CREATED_AUCTIONS", auctions);
@@ -27,8 +30,24 @@ public class UserData extends HashMap<String, Object> {
 		return (String)get("USERNAME");
 	}
 	
-	public void setLoggedIn(boolean loggedIn) {
-		put("LOGGED_IN", loggedIn);
+	public void login() {
+		put("LOGGED_IN", true);
+	}
+	
+	public void logout() {
+		put("LOGGED_IN", false);
+	}
+	
+	public void setHelp() {
+		put("HELP", true);
+	}
+	
+	public void clearHelp() {
+		put("HELP", false);
+	}
+	
+	public boolean isHelp() {
+		return (Boolean)get("HELP");
 	}
 	
 	public boolean isLoggedIn() {
@@ -39,10 +58,12 @@ public class UserData extends HashMap<String, Object> {
 		put("CURRENT_AUCTION", auction);
 	}
 	
-	public Auction leaveAuction() {
-		Auction auction = getCurrentAuction();
+	public void leaveAuction() {
 		joinAuction(null);
-		return auction;
+	}
+	
+	public boolean isInAuction() {
+		return (getCurrentAuction() != null);
 	}
 	
 	public Auction getCurrentAuction() {
@@ -84,5 +105,13 @@ public class UserData extends HashMap<String, Object> {
 	
 	public boolean isExit() {
 		return (Boolean)get("EXIT");
+	}
+	
+	public String getUserInfo() {
+		return getUserName();
+	}
+	
+	public String getStatus() {
+		return toString();
 	}
 }

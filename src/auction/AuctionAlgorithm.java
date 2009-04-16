@@ -2,11 +2,16 @@ package auction;
 
 import java.util.HashMap;
 import java.util.HashSet;
+
+import server.user.User;
 import static lib.Util.INFINITY;
 
 public class AuctionAlgorithm {
 	
-	protected static final Item DUMMY = new Item();
+	protected static final Item DUMMY = new Item(new User(), "DUMMY");
+	
+	// TODO: recursive insertion
+	// TODO: change_bid
 	
 	public static void matchBidder(Bidder bidder) {
 		HashMap<Item, Integer> potentials = new HashMap<Item, Integer>();

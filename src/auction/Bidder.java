@@ -26,17 +26,23 @@ public class Bidder {
 	
 	private Auction auction;
 	private LinkedHashSet<Bid> bids = new LinkedHashSet<Bid>();	
-	private Item matched; //TODO: match to dummy?
+	private Item matched; // DO NOT MATCH TO DUMMY!
 	private User user;
-	private int u = 0; //, shift = 0;
+	
+	@SuppressWarnings("unused")
+	private int u = 0, shift = 0;
 	
 //	public Bidder() {
-//		this(null); // TODO: we need this
+//		this(null); // TODO: we need this? PROLLY NOT
 //	}
 	
 	public Bidder(User user, Auction auction) {
 		this.user = user;
 		this.auction = auction;
+	}
+	
+	public User getUser() {
+		return user;
 	}
 	
 	public void addBid(Item item, int weight) {		

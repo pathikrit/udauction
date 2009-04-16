@@ -37,6 +37,7 @@ public class Console {
 				c = cmd.nextLine();
 				out.println(c);
 				out.flush();
+				System.out.println();
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

@@ -5,7 +5,7 @@ public class User {
 	private UserData data = new UserData();
 	
 	public User() {
-		data.setLoggedIn(false);
+		data.logout();
 	}
 	
 	public User(String username) {
@@ -14,6 +14,10 @@ public class User {
 	
 	public UserData getData() {
 		return data;
+	}
+	
+	public void setData(UserData data) {
+		this.data = data;
 	}
 	
 	public boolean equals(User user) {

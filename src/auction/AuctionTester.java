@@ -45,7 +45,7 @@ public class AuctionTester {
 					if (items.containsKey("I"+j) && w[i][j] != 0)
 						newBidder.addBid(items.get("I"+j), w[i][j]);
 					else if (w[i][j] != 0){
-						Item newItem = new Item("I"+j);
+						Item newItem = new Item(new User("B"+i), "I"+j);
 						items.put("I"+j, newItem);
 						newBidder.addBid(newItem, w[i][j]);
 					}
@@ -91,7 +91,7 @@ public class AuctionTester {
 			if (items.containsKey("I"+j) && items.get("I"+j).isActive() && w[j] != 0)
 				newBidder.addBid(items.get("I"+j), w[j]);
 			else if (w[j] != 0){
-				Item newItem = new Item("I"+j);
+				Item newItem = new Item(new User("B"+i),"I"+j);
 				items.put("I"+j, newItem);
 				newBidder.addBid(newItem, w[j]);
 			}
