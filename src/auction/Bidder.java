@@ -32,8 +32,12 @@ public class Bidder {
 	@SuppressWarnings("unused")
 	private int u = 0, shift = 0;
 	
-	public Bidder(UserData userData, Auction auction) {
+	public Bidder(UserData userData) {
 		this.userData = userData;
+	}
+	
+	public Bidder(UserData userData, Auction auction) {
+		this(userData);
 		this.auction = auction;
 	}
 	

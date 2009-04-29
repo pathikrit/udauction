@@ -14,7 +14,9 @@ public class ConsoleTester extends Console {
 	
 	public static void execute() {
 		Scanner cmd = new Scanner(
+					"help\n" +
 					"help_off\n" +
+					"info_item i1\n" +
 					"create_auction a1\n" +
 					"add_item i1\n" +
 					"login linh test\n" +
@@ -23,6 +25,7 @@ public class ConsoleTester extends Console {
 					"register linh test test\n" +
 					"register rick t1 t1\n" +
 					"login linh test2\n" +
+					"add_item i4 3000 4000\n" +
 					"login linh test\n" +						
 					"add_item i1\n" +
 					"login linh test\n" +
@@ -39,6 +42,7 @@ public class ConsoleTester extends Console {
 					"join_auction a1\n" +
 					"login linh test\n" +
 					"add_item i1\n" +
+					"help\n" +
 					"add_item i1\n" +
 					"add_item i2 i3 i1\n" +
 					"add_item i2 i3 i1\n" +
@@ -54,6 +58,7 @@ public class ConsoleTester extends Console {
 					"info_item i1\n" +
 					"info_item i2\n" +
 					"info_item i3\n" +
+					"info_item i4\n" +
 					"status\n" +
 					"logout\n" +
 					"login linh test\n" +

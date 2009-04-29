@@ -9,7 +9,7 @@ public class Item {
 	
 	private boolean active = true;
 	@SuppressWarnings("unused")
-	private int v = 0, startingPrice = 0, reservePrice = 0;
+	private int v = 0, startingPrice, reservePrice, buyNowPrice = Integer.MAX_VALUE;
 	private long startingTime, endTime, extendTime;	
 	
 	private UserData seller;
@@ -18,22 +18,42 @@ public class Item {
 	// TODO: Can we create two items in an auction with same id? NO!
 	
 	public Item(UserData userData, String id) {
-		this(userData, id, Long.MAX_VALUE, 0, 0);		
+		this.seller = userData;
+		this.id = id;
+		endTime = Long.MAX_VALUE;
+		extendTime = endTime;
+		startingTime = System.currentTimeMillis();
 	}
 	
 	public Item(UserData userData, String id, long endTime, long extendTime) {
-		this(userData, id, endTime, extendTime, 0);		
-	}
-	
-	public Item(UserData userData, String id, long endTime, long extendTime, long startTime) {
-		this.seller = userData;
-		this.id = id;
+		this(userData, id);
 		long time = System.currentTimeMillis();
 		this.endTime = time + endTime;
 		this.extendTime = this.endTime + extendTime;
-		this.startingTime = time + startTime;
+		startingTime = time;
 	}
-
+	
+	public Item(UserData userData, String id, long endTime, long extendTime, long startingTime, int startingPrice, int reservePrice, int buyNowPrice) {
+		this(userData, id, endTime, extendTime);
+		long time = System.currentTimeMillis();
+		if(startingTime == 0) {
+			setActive();
+		} else {
+			clearActive();
+		}
+		this.startingTime = time + startingTime;
+		this.startingPrice = startingPrice;
+		v = startingPrice;
+		this.reservePrice = Math.max(startingPrice, reservePrice);
+		if (reservePrice != 0 && reservePrice >= startingPrice) {
+			Bidder dummyBidder = new Bidder(userData);
+			dummyBidder.addBid(this, reservePrice);
+			dummyBidder.setMatched(this);
+			matched = dummyBidder;
+		}
+		this.buyNowPrice = buyNowPrice;
+	}
+	
 	public void setV(int v) {
 		this.v = v;
 	}

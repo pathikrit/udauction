@@ -42,20 +42,47 @@ public class Auction {
 	}
 	
 	public boolean addItem(UserData userData, String id) {
-		if(items.containsKey(id))
-			return false;
-		items.put(id, new Item(userData, id));
-		return true;
+		return addItem(userData, id, Long.MAX_VALUE + "", "0");
 	}
 	
-	public boolean addItem(UserData userData, String id, String deadline, String extended_deadline) {
+	public boolean addItem(UserData userData, String id, String endTime, String extendTime) {
 		if(items.containsKey(id))
 			return false;
 		try {
-			Item item = new Item(userData, id, Long.parseLong(deadline), Long.parseLong(extended_deadline));
+			Item item = new Item(userData, id, Long.parseLong(endTime), Long.parseLong(extendTime));
 			items.put(id, item);
 			userData.addSellItem(item);
-		} catch (NumberFormatException e){
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean addItem(UserData userData, String [] split) {
+		String id = split[1];
+		if(items.containsKey(id))
+			return false;
+		try {			
+			long endTime = Long.parseLong(split[2]),
+				  extendTime = Long.parseLong(split[3]),
+				  startingTime = 0;
+			int  startingPrice = 0,
+				  reservePrice = 0,
+				  buyNowPrice = Integer.MAX_VALUE;
+			if (split.length >= 5)
+				startingTime = Long.parseLong(split[4]);
+			if (split.length >= 6)
+				startingPrice = Integer.parseInt(split[5]);
+			if (split.length >= 7)
+				reservePrice = Integer.parseInt(split[6]);
+			if (split.length >= 8)
+				reservePrice = Integer.parseInt(split[7]);
+			if (split.length > 8)
+				return false;
+			Item item = new Item(userData, id, endTime, extendTime, startingTime, startingPrice, reservePrice, buyNowPrice);
+			items.put(id, item);
+			userData.addSellItem(item);
+		} catch (NumberFormatException e) {
 			return false;
 		}
 		return true;
@@ -121,7 +148,7 @@ public class Auction {
 		
 	public String getInfo() { // more detailed + description if needed
 		return "Auction name: " + name + "\n"
-				+ "Created by: " + auctionAdmin + "\n"
+				+ "Created by: " + auctionAdmin.getUserName() + "\n"
 				+ "Current number of bidders: " + bidders.size() + "\n"
 				+ "Current number of auctioned items: " + items.size();		
 	}

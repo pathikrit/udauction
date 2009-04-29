@@ -7,17 +7,14 @@ import auction.Auction;
 public class User extends LinkedHashMap<String, Object> {	
 	
 	private static final long	serialVersionUID	= -8070729974413538237L;
-	private UserData data = new UserData();
+	private UserData data;
 	
 	public User() {
 		leaveAuction();
 		setHelp();
+		clearHelpOnce();
 		logout();
 		clearExit();		
-	}
-	
-	public User(String username) {
-		data.setUserName(username);
 	}
 	
 	public UserData getData() {
@@ -38,6 +35,18 @@ public class User extends LinkedHashMap<String, Object> {
 	
 	public boolean isLoggedIn() {
 		return (Boolean)get("LOGGED_IN");
+	}
+	
+	public void setHelpOnce() {
+		put("HELP1", true);
+	}
+	
+	public void clearHelpOnce() {
+		put("HELP1", false);	
+	}
+	
+	public boolean isHelpOnce() {
+		return (Boolean)get("HELP1");
 	}
 	
 	public void setHelp() {

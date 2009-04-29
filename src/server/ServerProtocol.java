@@ -13,6 +13,7 @@ public class ServerProtocol {
 	
 	private static String commands[][] = {
 		//Before login
+		{"HELP"},
 		{"HELP_ON"},	// show all appropriate commands on the current level {before login, after login, etc..
 		{"HELP_OFF"},
 		{"REGISTER", "username", "password", "confirm_password"},
@@ -30,7 +31,8 @@ public class ServerProtocol {
 		{"LOGOUT"},	// save userData
 		//Inside an auction
 		{"LEAVE_AUCTION"},
-		// TODO: add support for optional: starting time[def:0], starting price[def:0], reserved price[def:0]
+		// TODO: add support for optional: starting_time[def:0], starting_price[def:0], reserve_price[def:0], buy_now_price[def:INF]
+		// Use -1 to skip the field
 		{"ADD_ITEM", "item_name", "deadline", "extended_deadline", "..."},
 		// In this case no optional fields can be included: it_name, dline, exline, it_name, dline, exline, ...
 		{"ADD_ITEMS", "item_name", "deadline", "extended_deadline", "..."},
@@ -57,7 +59,10 @@ public class ServerProtocol {
 		
 		// TODO: put user's login ip address in userdata & user
 		// TODO: every command has its own handler method
-		if(split[0].equalsIgnoreCase("HELP_ON")) {
+		if(split[0].equalsIgnoreCase("HELP")) {
+			user.setHelpOnce();
+			return "";
+		} else if(split[0].equalsIgnoreCase("HELP_ON")) {
 			user.setHelp();
 			return "Help is on";
 		} else if(split[0].equalsIgnoreCase("HELP_OFF")) {
@@ -69,11 +74,8 @@ public class ServerProtocol {
 					data = userTable.get(split[1]);
 					user.setData(data);
 				} else {
-					userTable.put(split[1], data);
+					return "Should not reach here!!!";
 				}
-				data.setUserName(split[1]);
-//				if(split[1].equals(data.getUserName()))
-//					return "You are already logged in!";
 				user.login();
 				return "Login Succesful!";
 			} else {
@@ -149,7 +151,7 @@ public class ServerProtocol {
 					user.leaveAuction();
 					return "You successfully left auction " + auction;
 				} else if(split[0].equalsIgnoreCase("ADD_ITEM")) {
-					if(auction.addItem(data, split[1], split[2], split[3])) {
+					if(auction.addItem(data, split)) {
 						return "You added item " + split[1] + " to auction the current auction";
 						// TODO: auto-generate item ids
 					} else {
@@ -160,7 +162,7 @@ public class ServerProtocol {
 					int c = 0;
 					if ((split.length-1) % 3 == 0) {
 						for(int i = 1; i < split.length; i+= 3) {
-							if(auction.addItem(data, split[i], split[i+1], split[i+2])) {
+							if (auction.addItem(data, split[i], split[i+1], split[i+2])){
 								msg += "You added an item " + split[i] + " to the current auction";
 								c++;
 								// TODO: auto-generate item ids
