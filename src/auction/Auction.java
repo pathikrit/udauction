@@ -15,8 +15,10 @@ public class Auction {
 	
 	private LinkedHashSet<Bidder> bidders = new LinkedHashSet<Bidder>();
 	private LinkedHashMap<String, Item> items = new LinkedHashMap<String, Item>();
+	private LinkedHashMap<String, Item> soldItems = new LinkedHashMap<String, Item>();
 	
 	public Auction(String name, UserData auctionAdmin) {
+		new SellingThread(this).start();
 		this.name = name;
 		this.auctionAdmin = auctionAdmin;
 	}
@@ -70,13 +72,13 @@ public class Auction {
 				  reservePrice = 0,
 				  buyNowPrice = Integer.MAX_VALUE;
 			if (split.length >= 5)
-				startingTime = Long.parseLong(split[4]);
+				startingTime = Math.max(Long.parseLong(split[4]), 0);
 			if (split.length >= 6)
-				startingPrice = Integer.parseInt(split[5]);
+				startingPrice = Math.max(Integer.parseInt(split[5]), 0);
 			if (split.length >= 7)
-				reservePrice = Integer.parseInt(split[6]);
+				reservePrice = Math.max(Integer.parseInt(split[6]), 0);
 			if (split.length >= 8)
-				reservePrice = Integer.parseInt(split[7]);
+				buyNowPrice = Math.max(Integer.parseInt(split[7]), 0);
 			if (split.length > 8)
 				return false;
 			Item item = new Item(userData, id, endTime, extendTime, startingTime, startingPrice, reservePrice, buyNowPrice);
@@ -88,28 +90,56 @@ public class Auction {
 		return true;
 	}
 	
+	protected void addSoldItem(Item item) {
+		soldItems.put(item.getId(), item);
+	}
+	
+	protected void deleteItem(String id) {
+		items.remove(id);
+	}
+	
 	public boolean deleteItem(UserData userData, String id) {
-		return items.containsKey(id) && items.get(id).deleteItem(userData);
+		if (items.containsKey(id) && items.get(id).deleteItem(userData)) {
+			deleteItem(id);
+			return true;
+		} else {
+			return false;
+		}		
 	}
 	
-	public String listItems() {
+	public String list(LinkedHashMap<String, Item> it) {
 		String ret = "";
-		for(Item it: items.values()) {
-			if (it.getMatched() != null) {
-				ret += "{" + it + ": " + it.getMatched().getUserData().getUserName() + "=" + it.getV() + "}";
-			} else {
-				ret += "{" + it + ": " + it.getMatched() + "=" + it.getV() + "}";
-			}
+		for(String i: it.keySet()) {
+			ret += it.get(i).getInfo() + "\n";
 		}
-		return ret;
+		return ret.substring(0, Math.max(0, ret.length()-1));
+	}
+	public String listItems() {
+		return list(items);
 	}
 	
-	public String getItemInfo(String id) {
-		if (items.containsKey(id)) {
-			return items.get(id).getInfo();
+	public String listSoldItems() {
+		return list(soldItems);
+	}
+	
+	public String getInfo(LinkedHashMap<String, Item> it, String id) {
+		if (it.containsKey(id)) {
+			return it.get(id).getInfo();
 		} else {
 			return "Failed to find an item";
 		}
+	}
+	
+	public String getItemInfo(String id) {
+		return getInfo(items, id);
+	}
+	
+	public String getSoldItemInfo(String id) {
+		return getInfo(soldItems, id);
+	}
+	
+	protected LinkedHashSet<Bidder> getBidders() {
+		return bidders;
 	}
 	
 	public boolean addBidder(UserData userData, String ids[], int weights[]) {
@@ -129,17 +159,22 @@ public class Auction {
 			return false;
 		
 		AuctionAlgorithm.matchBidder(bidder);		
-		if(bidder.getMatched().equals(AuctionAlgorithm.DUMMY)) {
+		if(AuctionAlgorithm.equalsDummy(bidder.getMatched())) {
 			// do nothing
-		} else if (bidders.contains(AuctionAlgorithm.DUMMY.getMatched())) {
+		} else if (bidders.contains(AuctionAlgorithm.getDummyMatched())) {
 			userData.addBidder(bidder);
-			AuctionAlgorithm.DUMMY.getMatched().getUserData().removeBidder(AuctionAlgorithm.DUMMY.getMatched());
-			bidders.remove(AuctionAlgorithm.DUMMY.getMatched());			
+			bidders.add(bidder);
+			AuctionAlgorithm.getDummyMatched().getUserData().removeBidder(AuctionAlgorithm.getDummyMatched());
+			bidders.remove(AuctionAlgorithm.getDummyMatched());			
 		} else {
 			userData.addBidder(bidder);
 			bidders.add(bidder);
 		}
 		return true;		
+	}
+	
+	protected void deleteBidder(Bidder bidder) {
+		bidders.remove(bidder);
 	}
 	
 	public boolean groupBid(ArrayList<Item> group) {
@@ -150,7 +185,8 @@ public class Auction {
 		return "Auction name: " + name + "\n"
 				+ "Created by: " + auctionAdmin.getUserName() + "\n"
 				+ "Current number of bidders: " + bidders.size() + "\n"
-				+ "Current number of auctioned items: " + items.size();		
+				+ "Current number of auctioned items: " + items.size() + "\n"
+				+ "Sold items: " + soldItems.keySet();
 	}
 	
 	public String toString() {

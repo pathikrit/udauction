@@ -13,6 +13,7 @@ public class User extends LinkedHashMap<String, Object> {
 		leaveAuction();
 		setHelp();
 		clearHelpOnce();
+		clearItemsOn();
 		logout();
 		clearExit();		
 	}
@@ -75,6 +76,18 @@ public class User extends LinkedHashMap<String, Object> {
 
 	public Auction getCurrentAuction() {
 		return (Auction)get("CURRENT_AUCTION");
+	}
+	
+	public void setItemsOn() {
+		put("ITEMS_ON", true);
+	}
+	
+	public void clearItemsOn() {
+		put("ITEMS_ON", false);
+	}
+	
+	public boolean isItemsOn() {
+		return (Boolean)get("ITEMS_ON");
 	}
 	
 	public void setExit() {

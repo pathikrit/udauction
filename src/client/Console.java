@@ -22,31 +22,22 @@ public class Console {
 	// TODO System.exit(-1)
 	// TODO JUnit testing
 	// TODO Check the static execute later
+	// TODO: merge all readConfigs into util
 	
-	public static void execute() {
-		Scanner cmd = new Scanner(System.in);
-		String c = "";		
-		do {		
-			try {
-				String fromServer;
-				for(Scanner in = new Scanner(serverSocket.getInputStream()); !(fromServer = in.nextLine()).equalsIgnoreCase("BYE"); ) { 				
-					System.out.println(fromServer);
-				}			
-				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
-				System.out.println();
-				c = cmd.nextLine();
-				out.println(c);
-				out.flush();
-				System.out.println();
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		} while(!c.equalsIgnoreCase("EXIT"));
+	public static void readConfig(String file) {
 		try {
-			serverSocket.close();
-		} catch (IOException e) {
+			for(Scanner sc = new Scanner(new File(file)); sc.hasNextLine(); ) {
+				String line = sc.nextLine().trim();
+				// TODO HashMap<String, String> config
+				if(line.startsWith("server"))
+					server = line.substring(line.indexOf("=")+1).trim();
+				else if(line.startsWith("port"))
+					port = Integer.parseInt(line.substring(line.indexOf("=")+1).trim());				
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -66,25 +57,32 @@ public class Console {
 		}	
 	}
 	
-	//TODO: merge all readConfigs into util 
-	
-	public static void readConfig(String file) {
+	public static void execute() {
+		Scanner cmd = new Scanner(System.in);
+		Scanner in;
 		try {
-			for(Scanner sc = new Scanner(new File(file)); sc.hasNextLine(); ) {
-				String line = sc.nextLine().trim();
-				// TODO HashMap<String, String> config
-				if(line.startsWith("server"))
-					server = line.substring(line.indexOf("=")+1).trim();
-				else if(line.startsWith("port"))
-					port = Integer.parseInt(line.substring(line.indexOf("=")+1).trim());				
-			}
-		} catch (NumberFormatException e) {
+			in = new Scanner(serverSocket.getInputStream());
+			String line = "";
+			do {
+				if (in.hasNext() == false) {
+					System.out.println("Server closed");
+					break;
+				}
+				for(; in.hasNext() && !(line = in.nextLine()).equalsIgnoreCase("BYE"); ) { 				
+					System.out.println(line);
+				}				
+				PrintWriter out = new PrintWriter(serverSocket.getOutputStream());
+				System.out.println();
+				line = cmd.nextLine();
+				out.println(line);
+				out.flush();
+				System.out.println();
+			} while(!line.equalsIgnoreCase("EXIT"));
+			serverSocket.close();
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			e1.printStackTrace();
+		}		
 	}
 	
 	public static void main(String[] args) {

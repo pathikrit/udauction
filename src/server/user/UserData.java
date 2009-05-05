@@ -80,17 +80,17 @@ public class UserData extends LinkedHashMap<String, Object> {
 	
 	@SuppressWarnings("unchecked")
 	public void addWonItem(Item item) {
-		((HashSet<Item>)get("WON_ITEM")).add(item);
+		((HashSet<Item>)get("WON_ITEMS")).add(item);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void removeWonItem(Item item) {
-		((HashSet<Item>)get("WON_ITEM")).remove(item);
+		((HashSet<Item>)get("WON_ITEMS")).remove(item);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public HashSet<Item> getWonItem() {
-		return ((HashSet<Item>)get("WON_ITEM"));
+		return ((HashSet<Item>)get("WON_ITEMS"));
 	}
 	
 	public boolean equals(UserData data) {

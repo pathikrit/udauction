@@ -8,10 +8,18 @@ import static lib.Util.INFINITY;
 
 public class AuctionAlgorithm {
 	
-	protected static final Item DUMMY = new Item(new UserData("DUMMY"), "DUMMY");
+	private static Item DUMMY = new Item(new UserData("DUMMY"), "DUMMY");
 	
 	// TODO: recursive insertion
 	// TODO: change_bid
+	
+	protected static Bidder getDummyMatched() {
+		return DUMMY.getMatched();
+	}
+	
+	protected static boolean equalsDummy(Item it) {
+		return DUMMY.equals(it);
+	}
 	
 	public static void matchBidder(Bidder bidder) {
 		HashMap<Item, Integer> potentials = new HashMap<Item, Integer>();
@@ -38,8 +46,7 @@ public class AuctionAlgorithm {
 					}
 					visitedBidders.add(b);
 					for (Bidder.Bid bid : b.getBids()) {
-						if ((bid.getFirst().isActive()) && 
-							(b.getMatched() == null || !b.getMatched().equals(bid.getFirst())) &&							
+						if ((b.getMatched() == null || !b.getMatched().equals(bid.getFirst())) &&							
 							(!potentials.containsKey(bid.getFirst()) || (b.getU() + bid.getFirst().getV() - bid.getSecond() < potentials.get(bid.getFirst())))) {
 							labelItems.put(bid.getFirst(), b);
 							potentials.put(bid.getFirst(), b.getU() + bid.getFirst().getV() - bid.getSecond());

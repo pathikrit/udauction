@@ -21,7 +21,9 @@ public class ConsoleTester extends Console {
 					"add_item i1\n" +
 					"login linh test\n" +
 					"login linh\n" +
+					"items_on\n" + 
 					"register linh test test2\n" +
+					"items_off\n" +
 					"register linh test test\n" +
 					"register rick t1 t1\n" +
 					"login linh test2\n" +
@@ -46,13 +48,15 @@ public class ConsoleTester extends Console {
 					"add_item i1\n" +
 					"add_item i2 i3 i1\n" +
 					"add_item i2 i3 i1\n" +
+					"items_on\n" +
 					"add_item i1 1000 2000\n" +
 					"bid i1 20\n" +
 					"bid i1 i2\n" +
 					"bid i1 10 i2\n" +
 					"bid i1 1 i2 20 i4 40\n" +
 					"bid i1 20 i2 10\n" +
-					"add_items i1 2000 3000 i2 3220 2039 i3 3920 2910\n" +
+					"items_off\n" + 
+					"add_items i1 2 3 i2 5 10 i3 15 0\n" +
 					"list_items\n" +
 					"info_item a1\n" +
 					"info_item i1\n" +

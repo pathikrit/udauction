@@ -3,20 +3,21 @@ package auction;
 import java.util.Date;
 import server.user.UserData;
 
+import static lib.Util.INFINITY;
+
 public class Item {
 	
 	private String id; //TODO: create a ItemData class to manage more item info
 	
-	private boolean active = true;
 	@SuppressWarnings("unused")
-	private int v = 0, startingPrice, reservePrice, buyNowPrice = Integer.MAX_VALUE;
+	private int v = 0, startingPrice, reservePrice, buyNowPrice = Integer.MAX_VALUE, soldPrice = INFINITY;
 	private long startingTime, endTime, extendTime;	
 	
 	private UserData seller;
 	private Bidder matched;
 	
 	// TODO: Can we create two items in an auction with same id? NO!
-	
+
 	public Item(UserData userData, String id) {
 		this.seller = userData;
 		this.id = id;
@@ -28,20 +29,15 @@ public class Item {
 	public Item(UserData userData, String id, long endTime, long extendTime) {
 		this(userData, id);
 		long time = System.currentTimeMillis();
-		this.endTime = time + endTime;
-		this.extendTime = this.endTime + extendTime;
+		this.endTime = time + Math.max(0, endTime) * 1000;
+		this.extendTime = this.endTime + Math.max(0, extendTime) * 1000;
 		startingTime = time;
 	}
 	
 	public Item(UserData userData, String id, long endTime, long extendTime, long startingTime, int startingPrice, int reservePrice, int buyNowPrice) {
 		this(userData, id, endTime, extendTime);
 		long time = System.currentTimeMillis();
-		if(startingTime == 0) {
-			setActive();
-		} else {
-			clearActive();
-		}
-		this.startingTime = time + startingTime;
+		this.startingTime = time + Math.max(0, startingTime) * 1000;
 		this.startingPrice = startingPrice;
 		v = startingPrice;
 		this.reservePrice = Math.max(startingPrice, reservePrice);
@@ -54,6 +50,10 @@ public class Item {
 		this.buyNowPrice = buyNowPrice;
 	}
 	
+	protected String getId() {
+		return id;
+	}
+	
 	public void setV(int v) {
 		this.v = v;
 	}
@@ -62,6 +62,14 @@ public class Item {
 		return v;
 	}
 
+	public void setSoldPrice(int soldPrice) {
+		this.soldPrice = soldPrice;
+	}
+
+	public int getSoldPrice() {
+		return soldPrice;
+	}
+	
 	public void setMatched(Bidder matched) {
 		this.matched = matched;
 	}
@@ -69,17 +77,17 @@ public class Item {
 	public Bidder getMatched() {
 		return matched;
 	}
-
-	public void setActive() {
-		active = true;
+	
+	protected long getStartingTime() {
+		return startingTime;
 	}
 	
-	public void clearActive() {
-		active = false;
+	protected long getEndingTime() {
+		return endTime;
 	}
-
-	public boolean isActive() {
-		return active;
+	
+	protected long getExtendedTime() {
+		return extendTime;
 	}
 	
 	public boolean deleteItem(UserData userData) {
@@ -91,8 +99,8 @@ public class Item {
 		Date endDate = new Date(endTime);
 		Date extendDate = new Date(extendTime);
 		String ret = 
-			  "Name: " + id + "\n"
-			+ "Price: " + v + "\n"
+			  "Item name: " + id + "\n"
+			+ "Price: " + (v==INFINITY ? soldPrice : v) + "\n"
 			+ "Starting price: " + startingPrice + "\n"
 			+ "Starting time: " + startingDate + "\n"
 			+ "End time: " + endDate + "\n"
@@ -104,6 +112,14 @@ public class Item {
 		
 	}
 
+	public void sell() {
+		soldPrice = v;
+		v = INFINITY;
+		matched.getUserData().addWonItem(this);
+		matched.getUserData().removeBidder(matched);
+		matched.getAuction().deleteBidder(matched);
+	}
+	
 	public String toString() {
 		return id;
 	}

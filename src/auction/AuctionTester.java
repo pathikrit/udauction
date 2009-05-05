@@ -88,7 +88,7 @@ public class AuctionTester {
 	private static Bidder convert(int w[], int i) {
 		Bidder newBidder = new Bidder(new UserData("B"+i), auction);
 		for (int j = 0; j < w.length; j++) {
-			if (items.containsKey("I"+j) && items.get("I"+j).isActive() && w[j] != 0)
+			if (items.containsKey("I"+j) && w[j] != 0)
 				newBidder.addBid(items.get("I"+j), w[j]);
 			else if (w[j] != 0){
 				Item newItem = new Item(new UserData("B"+i),"I"+j);
@@ -103,7 +103,7 @@ public class AuctionTester {
 	
 	private static void printResult() {
 		for (Bidder bidder: bidders) {
-			System.out.println("Bidder " + bidder + ((bidder.getMatched().equals(AuctionAlgorithm.DUMMY))?
+			System.out.println("Bidder " + bidder + ((AuctionAlgorithm.equalsDummy(bidder.getMatched()))?
 					" is not matched to any item":("(" + bidder.getU() + ") is matched to " + bidder.getMatched() + "[" + bidder.getMatched().getV() + "]")));
 		}
 	}

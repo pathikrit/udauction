@@ -1,5 +1,6 @@
 package auction;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import server.user.UserData;
@@ -10,6 +11,10 @@ public class AuctionManager extends HashMap<String, Auction> {
 	
 	private static final long serialVersionUID = 1024660891804044046L;
 
+	public AuctionManager() {
+		new SanityThread(this).start();
+	}
+	
 	public Auction createAuction(String auctionName, UserData auctionAdmin) {
 		auctionName = auctionName.toLowerCase();		
 		if(containsKey(auctionName))
@@ -31,6 +36,10 @@ public class AuctionManager extends HashMap<String, Auction> {
 		if(auction == null || !auction.canJoin(userData))
 			return null;
 		return auction;
+	}
+	
+	protected Collection<Auction> getAuctions() {
+		return this.values();
 	}
 	
 	public String listAuctions() {
